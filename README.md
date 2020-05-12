@@ -1,13 +1,22 @@
 # rocketduel
 An Augmented Reality version of the classic game artillery duel
 
-## Initial Setup
+## One time project setup
+
+This is just a reminder. No need to redo these steps.
+
+    yarn global add create-react-native-app
+    create-react-native-app rocketduel
+    
+## Local Environment Setup
 
     brew install npm yarn cocoapods
     npm install -g expo-cli
-    yarn global add create-react-native-app
-    create-react-native-app rocketduel
+    
 
-    cd rocketduel
+## Running the App
+
+Ensure the `Simulator.app` is running, then
+
     yarn start &
     yarn ios
