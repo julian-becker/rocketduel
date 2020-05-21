@@ -1,85 +1,34 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import GameScreen from './screens/Game';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 
-export default function App() {
+function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Welcome to Rocket Duel</Text>
-            </View>
-            <View style={styles.main}>
-                <Opponent/>
-                <Settings/>
+                <Text style={styles.title} testID="welcomeText">Welcome to Rocket Duel</Text>
             </View>
             <View style={styles.actions}>
-                <FireButton/>
+            <Button title={"New Game"} onPress={() => navigation.navigate('Game')} testID="newGameButton"/>
             </View>
         </View>
     );
 }
 
-export function Opponent() {
+const Stack = createStackNavigator();
+
+function App() {
     return (
-        <View>
-            <Text style={styles.label}>Opponent</Text>
-            <Text>{coordinate()}°, {coordinate()}°</Text>
-        </View>
-    )
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Game" component={GameScreen} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 }
-
-function coordinate() {
-    return Math.trunc(Math.random() * 10000000) / 100000
-}
-
-function fire() {
-}
-
-export function Settings() {
-    return (
-        <View>
-            <Thrust/>
-            <Angle/>
-        </View>
-    )
-}
-
-export function Thrust() {
-    return (
-        <View>
-            <Text style={styles.label}>Thrust</Text>
-            <TextInput style={styles.dataEntry}>999</TextInput><Text>N</Text>
-        </View>
-    )
-}
-
-export function Angle() {
-    return (
-        <View>
-            <Text style={styles.label}>Angle</Text>
-            <CoordinateEntry axis="X"/>
-            <CoordinateEntry axis="Y"/>
-            <CoordinateEntry axis="Z"/>
-        </View>
-    )
-}
-
-interface CoordinateEntryParams {
-    axis: String;
-}
-
-export function CoordinateEntry(props: CoordinateEntryParams) {
-    return (
-        <View>
-            <TextInput style={styles.dataEntry}>100</TextInput>
-            <Text>{props.axis}</Text>
-        </View>
-    )
-}
-
-function FireButton() {
-    return <Button title={"Fire!!!"} onPress={fire}/>;
-}
-
 
 const styles = StyleSheet.create({
     container: {
@@ -94,16 +43,9 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 25
     },
-    main: {
-        flex: 5
-    },
     actions: {
         flex: 1
-    },
-    label: {
-        fontWeight: "bold"
-    },
-    dataEntry: {
-        fontWeight: "100"
     }
 });
+
+export default App;
