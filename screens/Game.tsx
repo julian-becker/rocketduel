@@ -1,90 +1,103 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
 
-export default function GameScreen({ navigation }) {
+import useLocation from '../hooks/useLocation';
+
+
+const GameScreen = () => {
+    const { latitude, longitude } = useLocation();
+    const locationPanel = () => {
+        if (latitude && longitude) {
+            return (
+                <View>
+                    <Text>Your Location</Text>
+                    <Text testID='playerLatitude'>{latitude}</Text>
+                    <Text testID='playerLongitude'>{longitude}</Text>
+                </View>
+            )
+        } else {
+            return <ActivityIndicator />
+        }
+    }
     return (
         <View style={styles.container}>
-            <View style={styles.main}>
-                <Opponent/>
-                <Settings/>
-            </View>
-            <View style={styles.actions}>
-                <FireButton/>
-                <Button title={"Quit"} onPress={() => navigation.goBack()} />
+            <View style={styles.interior}>
+                {/* launcher half */}
+                <View style={styles.launcherSide}>
+                    <View style={styles.launcher}>
+                        <Text>Launcher goes here</Text>
+                    </View>
+                    <View style={styles.buttons}>
+                        <Button title={"Fire"} onPress={() => {return null}} />
+                        <Button title={"Quit"} onPress={() => navigation.goBack()} />
+                    </View>
+                </View>
+                {/* stats half */}
+                <View style={styles.statsSide}>
+                    <View style={styles.map}>
+                        <Text>map viz goes here</Text>
+                    </View>
+                    <View style={styles.stats}>
+                        {locationPanel()}
+                    </View>
+                    <View style={styles.thrust}>
+                        <Text>thrust control goes here</Text>
+                    </View>
+                </View>
             </View>
         </View>
     );
-}
-
-export function Opponent() {
-    return (
-        <View>
-            <Text style={styles.label}>Opponent</Text>
-            <Text>{coordinate()}°, {coordinate()}°</Text>
-        </View>
-    )
-}
-
-function coordinate() {
-    return Math.trunc(Math.random() * 10000000) / 100000
-}
-
-function fire() {
-}
-
-export function Settings() {
-    return (
-        <View>
-            <Thrust/>
-            <Angle/>
-        </View>
-    )
-}
-
-export function Thrust() {
-    return (
-        <View>
-            <Text style={styles.label}>Thrust</Text>
-            <TextInput style={styles.dataEntry}>999</TextInput><Text>N</Text>
-        </View>
-    )
-}
-
-export function Angle() {
-    return (
-        <View>
-            <Text style={styles.label}>Angle</Text>
-            <CoordinateEntry axis="X"/>
-            <CoordinateEntry axis="Y"/>
-            <CoordinateEntry axis="Z"/>
-        </View>
-    )
-}
-
-interface CoordinateEntryParams {
-    axis: String;
-}
-
-export function CoordinateEntry(props: CoordinateEntryParams) {
-    return (
-        <View>
-            <TextInput style={styles.dataEntry}>100</TextInput>
-            <Text>{props.axis}</Text>
-        </View>
-    )
-}
-
-function FireButton() {
-    return <Button title={"Fire!!!"} onPress={fire}/>;
 }
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 75,
-        paddingLeft: 25
+        backgroundColor: '#fff'
+    },
+    interior: {
+        flex: 1,
+        flexDirection: 'row',
+        padding: 20
+    },
+    launcherSide: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    launcher: {
+        flex: 4,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    buttons: {
+        flex: 1,
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+    },
+    statsSide: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    map: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    stats: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: 'red',
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+    },
+    thrust: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     header: {
         flex: 1
@@ -105,3 +118,5 @@ const styles = StyleSheet.create({
         fontWeight: "100"
     }
 });
+
+export default GameScreen;

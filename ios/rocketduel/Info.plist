@@ -62,12 +62,8 @@
 	<string>Allow rocketduel to use the camera</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Allow rocketduel experiences to access your contacts</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow rocketduel to use your location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow rocketduel to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow rocketduel to use your location</string>
+	<string>$(PRODUCT_NAME) needs to access your location while the game is running, so you can play the game.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow rocketduel to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
