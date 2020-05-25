@@ -10,10 +10,9 @@ const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min)
 };
 
-const useTarget = ({latitude, longitude}) => {
+const useTarget = (coords) => {
     const [target, setTarget] = useState({
-        latitude: latitude,
-        longitude: longitude,
+        coords: coords,
         bearing: 0,
         distance: 0,
         altitude: 0,
@@ -23,12 +22,12 @@ const useTarget = ({latitude, longitude}) => {
     const getTarget = () => {    
         const distance = getRandomInt(MIN_DISTANCE, MAX_DISTANCE) / 1000; // turf expects km
         const bearing = getRandomInt(-180, 180);
-        const origin = point([latitude, longitude]);
+        const origin = point(coords);
         const targetLocation = destination(origin, distance, bearing, {units: 'kilometers'});
         const coordinates = targetLocation.geometry && targetLocation.geometry.coordinates;
         // return the calculated data on the target. 
         // convert kilometers back to meters, and convert bearing to azimuth directions users are more familiar with
-        const output = {...target, distance: distance * 1000, bearing: bearingToAzimuth(bearing), latitude: coordinates[0], longitude: coordinates[1]}
+        const output = {...target, distance: distance * 1000, bearing: bearingToAzimuth(bearing), coords: coordinates}
         setTarget({...target, ...output});
     };
 

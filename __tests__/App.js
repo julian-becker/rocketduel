@@ -6,7 +6,7 @@ import App from '../App.tsx';
 // import { act } from '@testing-library/react-native';
 import { act, fireEvent, render, toJSON } from 'react-native-testing-library';
 import { renderHook } from '@testing-library/react-hooks';
-import useLocation from '../hooks/useLocation';
+import usePlayer from '../hooks/usePlayer';
 import '@testing-library/jest-native/extend-expect';
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper'); 
@@ -28,7 +28,7 @@ test('renders the app correctly', async () => {
     expect(getByText('Welcome to Rocket Duel')).toBeTruthy();
     expect(newGameButton).toBeTruthy();
     
-    const { result } = renderHook(() => useLocation())
+    const { result } = renderHook(() => usePlayer())
     await act(async() => {
       await fireEvent(newGameButton, 'press');
     })
