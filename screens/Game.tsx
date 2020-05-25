@@ -2,14 +2,23 @@ import React from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
 
 import useLocation from '../hooks/useLocation';
-
+import useTarget from '../hooks/useTarget';
 
 const GameScreen = () => {
     const { latitude, longitude } = useLocation();
+    const target = useTarget({ latitude, longitude });
+
     const locationPanel = () => {
         if (latitude && longitude) {
             return (
                 <View>
+                    <Text>Target:</Text>
+                    <Text testID='targetLatitude'>{target.latitude.toFixed(3)}</Text>
+                    <Text testID='targetLongitude'>{target.longitude.toFixed(3)}</Text>
+                    <Text testID='targetDistance'>{target.distance} meters</Text>
+                    <Text testID='targetBearing'>{target.bearing} &deg;</Text>
+                    <Text testID='targetHealth'>Health: {target.health}</Text>
+                    <Text>******************</Text>
                     <Text>Your Location</Text>
                     <Text testID='playerLatitude'>{latitude}</Text>
                     <Text testID='playerLongitude'>{longitude}</Text>
