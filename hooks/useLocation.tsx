@@ -3,12 +3,12 @@ import * as Location from 'expo-location';
 
 const useLocation = () => {
     const [location, setLocation] = useState({
-        latitude: null,
-        longitude: null,
-        altitude: null,
-        accuracy: null,
-        speed: null,
-        heading: null
+        latitude: 0,
+        longitude: 0,
+        altitude: 0,
+        accuracy: 0,
+        speed: 0,
+        heading: 0
     });
 
     const getLocation = async () => {    
