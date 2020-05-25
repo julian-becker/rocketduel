@@ -1,5 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
+import Slider from '@react-native-community/slider';
 
 import useLocation from '../hooks/useLocation';
 import useTarget from '../hooks/useTarget';
@@ -50,7 +51,13 @@ const GameScreen = () => {
                         {locationPanel()}
                     </View>
                     <View style={styles.thrust}>
-                        <Text>thrust control goes here</Text>
+                        <Slider
+                          style={styles.thrustSlider}
+                          minimumValue={0}
+                          maximumValue={100}
+                          step={1}
+                          value={0}
+                        />
                     </View>
                 </View>
             </View>
@@ -107,6 +114,11 @@ const styles = StyleSheet.create({
         borderColor: 'red',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    thrustSlider: {
+        width: '100%',
+        flex: 1,
+        transform: [ { rotate: "-90deg" } ],
     },
     header: {
         flex: 1
