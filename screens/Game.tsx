@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,7 +9,7 @@ import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../h
 
 const GameScreen = () => {
     const navigation = useNavigation();
-    
+
     const { location, bearing, angle } = usePlayer();
     const { coords, altitude, accuracy, speed, heading } = location;
     const target = useTarget(coords);
@@ -17,11 +17,20 @@ const GameScreen = () => {
 
     useEffect(() => {
         // update the projectile location when the player location changes
-        dispatch({type: 'UPDATE_LOCATION', location: location})
+        dispatch({type: 'UPDATE_LOCATION', value: location})
     }, [location]);
 
     const setThrust = (thrust) => {
-        dispatch({type: 'UPDATE_THRUST', thrust: thrust});
+        dispatch({type: 'UPDATE_THRUST', value: thrust});
+    }
+
+    onChangeInput = (value, parameter = 'bearing') => {
+        const num = Number(value);
+        const maxRange = parameter === 'angle' ? 90 : 360;
+        // hacky validation - check that value is valid before dispatch
+        if (Number.isInteger(num) && 0 <= num && num <= maxRange) {
+          dispatch({type: `UPDATE_${parameter.toUpperCase()}`, value: num});
+        }
     }
 
     const locationPanel = () => {
@@ -64,6 +73,20 @@ const GameScreen = () => {
                     </View>
                     <View style={styles.stats}>
                         {locationPanel()}
+                        <Text>Bearing:</Text><TextInput
+                            style={styles.input}
+                            onChangeText={text => onChangeInput(text, 'bearing')}
+                            defaultValue="0"
+                            autoCorrect={false}
+                            keyboardType={"numeric"}
+                        />
+                        <Text>Angle:</Text><TextInput
+                            style={styles.input}
+                            onChangeText={text => onChangeInput(text, 'angle')}
+                            defaultValue="0"
+                            autoCorrect={false}
+                            keyboardType={"numeric"}
+                        />
                     </View>
                     <View style={styles.thrust}>
                         <Slider
@@ -136,6 +159,12 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         transform: [ { rotate: "-90deg" } ],
+    },
+    input: {
+        height: 26,
+        width: 100,
+        borderColor: 'gray',
+        borderWidth: 1
     },
     header: {
         flex: 1

@@ -11,11 +11,13 @@ const DEFAULT_STATE = {
 const projectileReducer = (state, action) => {
   switch (action.type) {
     case 'UPDATE_LOCATION':
-      return { ...state, ...action.location };
+      return { ...state, ...action.value };
     case 'UPDATE_THRUST':
-      return { ...state, thrust: action.thrust };
+      return { ...state, thrust: action.value };
+    case 'UPDATE_BEARING':
+      return { ...state, bearing: action.value };
     case 'UPDATE_ANGLE':
-      return { ...state, angle: action.angle };
+      return { ...state, angle: action.value };
     case 'FIRE':
       return { ...state, isInFlight: true };
     default:

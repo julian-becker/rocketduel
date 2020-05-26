@@ -34,7 +34,7 @@ const usePlayer = () => {
         "speed": speed
       }
       setPlayer({location: {...player.location, ...mappedLocation}});
-      dispatch({type: 'UPDATE_LOCATION', location: mappedLocation});
+      dispatch({type: 'UPDATE_LOCATION', value: mappedLocation});
     })
   };
 
