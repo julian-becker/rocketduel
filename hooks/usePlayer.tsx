@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
+import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
+
 import * as Location from 'expo-location';
 
 const usePlayer = () => {
@@ -14,7 +16,8 @@ const usePlayer = () => {
     angle: 0 // obtain from gyroscope - 0 (horizontal) to 90 (vertical)
   }
   const [player, setPlayer] = useState(DEFAULT_STATE);
-
+  // initialize the projectile as well
+  const [projectile, dispatch] = useReducer(projectileReducer,initialProjectileState);
   const getPlayer = async () => {   
     // can only set timeInterval or distanceInterval - not both
     // https://github.com/expo/expo/issues/2682
@@ -30,7 +33,8 @@ const usePlayer = () => {
         "heading": heading,
         "speed": speed
       }
-      setPlayer({location: {...player.location, ...mappedLocation}})
+      setPlayer({location: {...player.location, ...mappedLocation}});
+      dispatch({type: 'UPDATE_LOCATION', location: mappedLocation});
     })
   };
 

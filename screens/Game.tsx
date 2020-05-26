@@ -1,14 +1,28 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { useNavigation } from '@react-navigation/native';
 
 import usePlayer from '../hooks/usePlayer';
 import useTarget from '../hooks/useTarget';
+import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
 
 const GameScreen = () => {
+    const navigation = useNavigation();
+    
     const { location, bearing, angle } = usePlayer();
     const { coords, altitude, accuracy, speed, heading } = location;
     const target = useTarget(coords);
+    const [projectile, dispatch] = useReducer(projectileReducer, initialProjectileState);
+
+    useEffect(() => {
+        // update the projectile location when the player location changes
+        dispatch({type: 'UPDATE_LOCATION', location: location})
+    }, [location]);
+
+    const setThrust = (thrust) => {
+        dispatch({type: 'UPDATE_THRUST', thrust: thrust});
+    }
 
     const locationPanel = () => {
         if (coords) {
@@ -54,11 +68,13 @@ const GameScreen = () => {
                     <View style={styles.thrust}>
                         <Slider
                           style={styles.thrustSlider}
-                          minimumValue={0}
+                          minimumValue={1}
                           maximumValue={100}
                           step={1}
-                          value={0}
+                          value={projectile.thrust}
+                          onSlidingComplete={setThrust}
                         />
+                        <Text>Thrust: {projectile.thrust}</Text>
                     </View>
                 </View>
             </View>
