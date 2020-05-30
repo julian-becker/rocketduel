@@ -1,25 +1,30 @@
+import { BLAST_RADIUS } from '../lib/gameMechanics';
+
 const DEFAULT_STATE = {
-  "coords": [0, 0],
-  "bearing": 0,
-  "angle": 0,
+  "coords": null, // projectile coords are only set on impact
+  "azimuth": 0,
+  "elevation": 0,
   "altitude": 0,
-  "thrust": 1,
-  "blastRadius": 35, //in meters
-  "isInFlight": false
+  "thrust": 0,
+  "blastRadius": BLAST_RADIUS, //in meters
+  "isInFlight": false,
+  "isLanded": false
 }
 
 const projectileReducer = (state, action) => {
   switch (action.type) {
-    case 'UPDATE_LOCATION':
-      return { ...state, ...action.value };
+    case 'UPDATE_COORDS':
+      return { ...state, coords: action.value };
     case 'UPDATE_THRUST':
       return { ...state, thrust: action.value };
-    case 'UPDATE_BEARING':
-      return { ...state, bearing: action.value };
-    case 'UPDATE_ANGLE':
-      return { ...state, angle: action.value };
+    case 'UPDATE_AZIMUTH':
+      return { ...state, azimuth: action.value };
+    case 'UPDATE_ELEVATION':
+      return { ...state, elevation: action.value };
     case 'FIRE':
       return { ...state, isInFlight: true };
+    case 'LANDED':
+      return { ...state, isInFlight: false, isLanded: true, coords: action.value};
     default:
       return { ...state };
   }

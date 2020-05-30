@@ -1,35 +1,73 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useNavigation } from '@react-navigation/native';
 
 import usePlayer from '../hooks/usePlayer';
-import useTarget from '../hooks/useTarget';
+import { useTarget } from '../hooks/useTarget';
 import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
+import { BLAST_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust } from '../lib/gameMechanics';
+
+import * as turf from '@turf/turf';
 
 const GameScreen = () => {
+    // temporary, to report impact back to the screen
+    const [impact, setImpact] = useState({
+        isLanded: false,
+        isAHit: false,
+        distance: 0,
+        proximity: 0,
+        time: 0,
+    });
     const navigation = useNavigation();
 
-    const { location, bearing, angle } = usePlayer();
-    const { coords, altitude, accuracy, speed, heading } = location;
+    const { location } = usePlayer();
+    const { coords, altitude } = location;
     const target = useTarget(coords);
-    const [projectile, dispatch] = useReducer(projectileReducer, initialProjectileState);
-
-    useEffect(() => {
-        // update the projectile location when the player location changes
-        dispatch({type: 'UPDATE_LOCATION', value: location})
-    }, [location]);
+    const [ projectile, dispatch ] = useReducer(projectileReducer, initialProjectileState);
+    const { thrust, elevation, azimuth } = projectile;
 
     const setThrust = (thrust) => {
         dispatch({type: 'UPDATE_THRUST', value: thrust});
     }
 
-    onChangeInput = (value, parameter = 'bearing') => {
+    const onPressFire = () => {
+        dispatch({type: 'FIRE'});
+        const impact = calculateImpact({
+            originCoords: coords,
+            targetCoords: target.coords,
+            velocity: convertThrust(Number(thrust)),
+            elevation: Number(elevation),
+            azimuth: azimuth,
+            height: Number(altitude)
+        });
+        setImpact({
+            isLanded: true,
+            isAHit: impact.proximity <= BLAST_RADIUS,
+            distance: Math.round(impact.distance),
+            proximity:  Math.round(impact.proximity),
+            time:  Math.round(impact.time)
+        })
+    }
+
+    const onChangeInput = (value, parameter = 'azimuth') => {
         const num = Number(value);
-        const maxRange = parameter === 'angle' ? 90 : 360;
+        const minRange = parameter === 'elevation' ? MIN_MORTAR_ELEVATION : 0;
+        const maxRange = parameter === 'elevation' ? MAX_MORTAR_ELEVATION : 360;
         // hacky validation - check that value is valid before dispatch
-        if (Number.isInteger(num) && 0 <= num && num <= maxRange) {
+        if (Number.isInteger(num) && minRange <= num && num <= maxRange) {
           dispatch({type: `UPDATE_${parameter.toUpperCase()}`, value: num});
+        }
+    }
+
+    const impactPanel = () => {
+        const { isLanded, isAHit, distance, proximity, time } = impact;
+        if (isLanded) {
+            return (
+                <View>
+                    <Text>{`Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target. It was a ${isAHit ? 'HIT!!!' : 'miss'}.`}</Text>
+                </View>
+            )
         }
     }
 
@@ -41,7 +79,7 @@ const GameScreen = () => {
                     <Text testID='targetLatitude'>{target.coords[0].toFixed(3)}</Text>
                     <Text testID='targetLongitude'>{target.coords[1].toFixed(3)}</Text>
                     <Text testID='targetDistance'>{target.distance} meters</Text>
-                    <Text testID='targetBearing'>{target.bearing} &deg;</Text>
+                    <Text testID='targetBearing'>{target.azimuth} &deg;</Text>
                     <Text testID='targetHealth'>Health: {target.health}</Text>
                     <Text>******************</Text>
                     <Text>Your Location</Text>
@@ -58,11 +96,14 @@ const GameScreen = () => {
             <View style={styles.interior}>
                 {/* launcher half */}
                 <View style={styles.launcherSide}>
+                    <View style={styles.impactPanel}>
+                        {impactPanel()}
+                    </View>
                     <View style={styles.launcher}>
                         <Text>Launcher goes here</Text>
                     </View>
                     <View style={styles.buttons}>
-                        <Button title={"Fire"} onPress={() => {return null}} />
+                        <Button title={"Fire"} onPress={() => onPressFire()} />
                         <Button title={"Quit"} onPress={() => navigation.goBack()} />
                     </View>
                 </View>
@@ -75,14 +116,14 @@ const GameScreen = () => {
                         {locationPanel()}
                         <Text>Bearing:</Text><TextInput
                             style={styles.input}
-                            onChangeText={text => onChangeInput(text, 'bearing')}
+                            onChangeText={text => onChangeInput(text, 'azimuth')}
                             defaultValue="0"
                             autoCorrect={false}
                             keyboardType={"numeric"}
                         />
-                        <Text>Angle:</Text><TextInput
+                        <Text>Elevation:</Text><TextInput
                             style={styles.input}
-                            onChangeText={text => onChangeInput(text, 'angle')}
+                            onChangeText={text => onChangeInput(text, 'elevation')}
                             defaultValue="0"
                             autoCorrect={false}
                             keyboardType={"numeric"}
@@ -91,7 +132,7 @@ const GameScreen = () => {
                     <View style={styles.thrust}>
                         <Slider
                           style={styles.thrustSlider}
-                          minimumValue={1}
+                          minimumValue={0}
                           maximumValue={100}
                           step={1}
                           value={projectile.thrust}
@@ -119,6 +160,11 @@ const styles = StyleSheet.create({
     launcherSide: {
         flex: 1,
         flexDirection: 'column'
+    },
+    impactPanel: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     launcher: {
         flex: 4,
@@ -178,7 +224,7 @@ const styles = StyleSheet.create({
     actions: {
         flex: 1
     },
-    label: {
+    bold: {
         fontWeight: "bold"
     },
     dataEntry: {
