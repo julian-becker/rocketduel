@@ -1,5 +1,7 @@
 import React from 'react';
-import { Alert, Button, Linking, StyleSheet, Text, View } from 'react-native';
+import { ButtonText } from './styled/Text';
+import Button from './styled/Button';
+import { red, white } from './styled/Colors';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,10 +10,10 @@ const NewGameButton = () => {
 
     return (
         <Button
-            title={"New Game"}
+            backgroundColor={red}
             onPress={() => navigation.navigate('Game')}
-            testID="newGameButton"
-        />
+            accessibilityID="newGameButton"
+        ><ButtonText bold align='center' color={white}>New Game</ButtonText></Button>
     )
 }
 

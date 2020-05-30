@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Linking, StyleSheet, Text, View } from 'react-native';
-
+import Container from '../components/styled/Container'
 import NewGameButton from '../components/NewGameButton';
 import usePermissions from '../hooks/usePermissions';
 
@@ -13,26 +13,21 @@ const appSettingsPrompt = () => {
 const HomeScreen = () => {
     const permission = usePermissions('LOCATION');
     return (
-        <View style={styles.container}>
+        <Container>
             <View style={styles.header}>
                 <Text style={styles.title} testID="welcomeText">Welcome to Rocket Duel</Text>
             </View>
             <View style={styles.actions}>
             { permission.isDenied ? appSettingsPrompt() : <NewGameButton /> }
             </View>
-        </View>
+        </Container>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 75,
-        paddingLeft: 25
-    },
     header: {
-        flex: 1
+        flex: 3,
+        alignItems: 'center'
     },
     title: {
         fontSize: 25

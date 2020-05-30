@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useReducer } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
 import Slider from '@react-native-community/slider';
+import Container from '../components/styled/Container'
+import { BodyText, ButtonText, Header } from '../components/styled/Text';
+import Button from '../components/styled/Button';
+import { blue, red, white } from '../components/styled/Colors';
 import { useNavigation } from '@react-navigation/native';
 
 import usePlayer from '../hooks/usePlayer';
@@ -9,6 +13,7 @@ import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../h
 import { BLAST_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust } from '../lib/gameMechanics';
 
 import * as turf from '@turf/turf';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const GameScreen = () => {
     // temporary, to report impact back to the screen
@@ -71,28 +76,37 @@ const GameScreen = () => {
         }
     }
 
-    const locationPanel = () => {
-        if (coords) {
+    const targetPanel = () => {
+        if (target && target.coords) {
             return (
                 <View>
-                    <Text>Target:</Text>
-                    <Text testID='targetLatitude'>{target.coords[0].toFixed(3)}</Text>
-                    <Text testID='targetLongitude'>{target.coords[1].toFixed(3)}</Text>
-                    <Text testID='targetDistance'>{target.distance} meters</Text>
-                    <Text testID='targetBearing'>{target.azimuth} &deg;</Text>
-                    <Text testID='targetHealth'>Health: {target.health}</Text>
-                    <Text>******************</Text>
-                    <Text>Your Location</Text>
-                    <Text testID='playerLatitude'>{coords[0]}</Text>
-                    <Text testID='playerLongitude'>{coords[1]}</Text>
+                    <Header>Target:</Header>
+                    <BodyText accessibilityID='targetCoords'>{`[${target.coords[0].toFixed(3)}, ${target.coords[1].toFixed(3)}]`}</BodyText>
+                    <BodyText accessibilityID='targetDistance'>{target.distance} meters</BodyText>
+                    <BodyText accessibilityID='targetBearing'>{target.azimuth} &deg;</BodyText>
+                    <BodyText accessibilityID='targetHealth'>Health: {target.health}</BodyText>
                 </View>
             )
         } else {
             return <ActivityIndicator />
         }
     }
+    const locationPanel = () => {
+        if (coords) {
+            return (
+                <View style={styles.playerLocation}>
+                    <Header>Your Location</Header>
+                    <BodyText accessibilityID='playerLatitude'>{coords[0]}</BodyText>
+                    <BodyText accessibilityID='playerLongitude'>{coords[1]}</BodyText>
+                </View>
+            )
+        } else {
+            return <ActivityIndicator />
+        }
+    }
+
     return (
-        <View style={styles.container}>
+        <Container>
             <View style={styles.interior}>
                 {/* launcher half */}
                 <View style={styles.launcherSide}>
@@ -100,28 +114,34 @@ const GameScreen = () => {
                         {impactPanel()}
                     </View>
                     <View style={styles.launcher}>
-                        <Text>Launcher goes here</Text>
+                        <BodyText>Launcher goes here</BodyText>
                     </View>
                     <View style={styles.buttons}>
-                        <Button title={"Fire"} onPress={() => onPressFire()} />
-                        <Button title={"Quit"} onPress={() => navigation.goBack()} />
+                        <Button onPress={() => onPressFire()} >
+                            <BodyText bold align='center' color={white}>Fire</BodyText>
+                        </Button>
+                        <TouchableOpacity onPress={() => navigation.goBack()} >
+                            <BodyText align='center' color={blue}>Regenerate Target</BodyText>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 {/* stats half */}
                 <View style={styles.statsSide}>
                     <View style={styles.map}>
-                        <Text>map viz goes here</Text>
+                        {targetPanel()}
                     </View>
                     <View style={styles.stats}>
                         {locationPanel()}
-                        <Text>Bearing:</Text><TextInput
+                        <Header>Bearing:</Header>
+                        <TextInput
                             style={styles.input}
                             onChangeText={text => onChangeInput(text, 'azimuth')}
                             defaultValue="0"
                             autoCorrect={false}
                             keyboardType={"numeric"}
                         />
-                        <Text>Elevation:</Text><TextInput
+                        <Header>Elevation:</Header>
+                        <TextInput
                             style={styles.input}
                             onChangeText={text => onChangeInput(text, 'elevation')}
                             defaultValue="0"
@@ -138,24 +158,20 @@ const GameScreen = () => {
                           value={projectile.thrust}
                           onSlidingComplete={setThrust}
                         />
-                        <Text>Thrust: {projectile.thrust}</Text>
+                        <BodyText>Thrust: {projectile.thrust}</BodyText>
                     </View>
                 </View>
             </View>
-        </View>
+        </Container>
     );
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff'
-    },
     interior: {
         flex: 1,
         flexDirection: 'row',
-        padding: 20
+        margin: 3
     },
     launcherSide: {
         flex: 1,
@@ -178,26 +194,26 @@ const styles = StyleSheet.create({
     },
     statsSide: {
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        margin: 3
     },
     map: {
         flex: 1,
-        borderWidth: 1,
-        borderColor: 'red',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'flex-start'
     },
     stats: {
         flex: 1,
-        borderWidth: 1,
-        borderColor: 'red',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         justifyContent: 'center'
+    },
+    playerLocation: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10
     },
     thrust: {
         flex: 1,
-        borderWidth: 1,
-        borderColor: 'red',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -207,7 +223,7 @@ const styles = StyleSheet.create({
         transform: [ { rotate: "-90deg" } ],
     },
     input: {
-        height: 26,
+        height: 30,
         width: 100,
         borderColor: 'gray',
         borderWidth: 1
