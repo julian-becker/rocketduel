@@ -8,7 +8,7 @@ import { blue, red, white } from '../components/styled/Colors';
 import { useNavigation } from '@react-navigation/native';
 
 import usePlayer from '../hooks/usePlayer';
-import { useTarget } from '../hooks/useTarget';
+import { initTarget, targetReducer } from '../hooks/useTarget';
 import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
 import { IMPACT_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 
@@ -30,7 +30,7 @@ const GameScreen = () => {
 
     const { location } = usePlayer();
     const { coords, altitude } = location;
-    const target = useTarget(coords);
+    const [ target, dispatchTarget ] = useReducer(targetReducer, coords, initTarget);
     const [ projectile, dispatch ] = useReducer(projectileReducer, initialProjectileState);
     const { thrust, elevation, azimuth } = projectile;
 
