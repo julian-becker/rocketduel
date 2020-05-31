@@ -4,7 +4,7 @@ import Slider from '@react-native-community/slider';
 import Container from '../components/styled/Container'
 import { BodyText, ButtonText, Header } from '../components/styled/Text';
 import Button from '../components/styled/Button';
-import { blue, red, white } from '../components/styled/Colors';
+import { blue, black, red, white } from '../components/styled/Colors';
 import { useNavigation } from '@react-navigation/native';
 
 import { initTarget, targetReducer } from '../hooks/useTarget';
@@ -16,7 +16,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const GameScreen = ({ player }) => {
     // temporary, to report impact back to the screen
-    const [impact, setImpact] = useState({
+    const defaultImpactState = {
         isLanded: false,
         isAHit: false,
         isAKill: false,
@@ -24,7 +24,8 @@ const GameScreen = ({ player }) => {
         distance: 0,
         proximity: 0,
         time: 0,
-    });
+    };
+    const [impact, setImpact] = useState(defaultImpactState);
     const navigation = useNavigation();
     const { coords, altitude } = player.location;
     const [ target, dispatchTarget ] = useReducer(targetReducer, coords, initTarget);
@@ -46,6 +47,7 @@ const GameScreen = ({ player }) => {
             height: Number(altitude)
         });
         const damage = calculateDamage(impact.proximity);
+        dispatchTarget({type: 'UPDATE_HEALTH', value: damage});
         setImpact({
             isLanded: true,
             isAHit: impact.proximity <= IMPACT_RADIUS,
@@ -68,15 +70,17 @@ const GameScreen = ({ player }) => {
     }
 
     const regenerateTarget = (coords: Array<number>) => {
+        // clear current impact, if any
+        setImpact(defaultImpactState);
         dispatchTarget({type: 'REGENERATE_TARGET', value: coords});
     }
 
     const impactPanel = () => {
-        const { isLanded, isAKill, damage, distance, proximity, time } = impact;
+        const { isLanded, damage, distance, proximity, time } = impact;
         if (isLanded) {
             return (
                 <View>
-                    <Text>{`Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target, causing ${damage} damage. ${isAKill ? 'It was destroyed!' : ''}.`}</Text>
+                    <Text>{`Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target, causing ${damage} damage.`}</Text>
                 </View>
             )
         }
@@ -84,13 +88,14 @@ const GameScreen = ({ player }) => {
 
     const targetPanel = () => {
         if (target && target.coords) {
+            const { coords, distance, azimuth, health, isDestroyed } = target;
             return (
                 <View>
                     <Header>Target:</Header>
-                    <BodyText accessibilityID='targetCoords'>{`[${target.coords[0].toFixed(3)}, ${target.coords[1].toFixed(3)}]`}</BodyText>
-                    <BodyText accessibilityID='targetDistance'>{target.distance} meters</BodyText>
-                    <BodyText accessibilityID='targetBearing'>{target.azimuth} &deg;</BodyText>
-                    <BodyText accessibilityID='targetHealth'>Health: {target.health}</BodyText>
+                    <BodyText accessibilityID='targetCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
+                    <BodyText accessibilityID='targetDistance'>{distance} meters</BodyText>
+                    <BodyText accessibilityID='targetBearing'>{azimuth} &deg;</BodyText>
+                    <BodyText color={isDestroyed ? red : black} accessibilityID='targetHealth'>{target.isDestroyed ? `Destroyed` : `Health: ${target.health}`}</BodyText>
                 </View>
             )
         } else {

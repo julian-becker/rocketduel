@@ -22,6 +22,8 @@ const projectileReducer = (state, action) => {
       return { ...state, isInFlight: true };
     case 'LANDED':
       return { ...state, isInFlight: false, isLanded: true, coords: action.value};
+    case 'CLEAR_PROJECTILE':
+      return { ...state, ...DEFAULT_STATE};
     default:
       return { ...state };
   }
