@@ -7,7 +7,6 @@ import Button from '../components/styled/Button';
 import { blue, red, white } from '../components/styled/Colors';
 import { useNavigation } from '@react-navigation/native';
 
-import usePlayer from '../hooks/usePlayer';
 import { initTarget, targetReducer } from '../hooks/useTarget';
 import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
 import { IMPACT_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
@@ -15,7 +14,7 @@ import { IMPACT_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImp
 import * as turf from '@turf/turf';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const GameScreen = () => {
+const GameScreen = ({ player }) => {
     // temporary, to report impact back to the screen
     const [impact, setImpact] = useState({
         isLanded: false,
@@ -27,9 +26,7 @@ const GameScreen = () => {
         time: 0,
     });
     const navigation = useNavigation();
-
-    const { location } = usePlayer();
-    const { coords, altitude } = location;
+    const { coords, altitude } = player.location;
     const [ target, dispatchTarget ] = useReducer(targetReducer, coords, initTarget);
     const [ projectile, dispatch ] = useReducer(projectileReducer, initialProjectileState);
     const { thrust, elevation, azimuth } = projectile;
@@ -68,6 +65,10 @@ const GameScreen = () => {
         if (Number.isInteger(num) && minRange <= num && num <= maxRange) {
           dispatch({type: `UPDATE_${parameter.toUpperCase()}`, value: num});
         }
+    }
+
+    const regenerateTarget = (coords: Array<number>) => {
+        dispatchTarget({type: 'REGENERATE_TARGET', value: coords});
     }
 
     const impactPanel = () => {
@@ -123,10 +124,10 @@ const GameScreen = () => {
                     </View>
                     <View style={styles.buttons}>
                         <Button onPress={() => onPressFire()} >
-                            <BodyText bold align='center' color={white}>Fire</BodyText>
+                            <ButtonText bold align='center' color={white}>Fire</ButtonText>
                         </Button>
-                        <TouchableOpacity onPress={() => navigation.goBack()} >
-                            <BodyText align='center' color={blue}>Quit</BodyText>
+                        <TouchableOpacity onPress={() => regenerateTarget(coords)} >
+                            <BodyText align='center' color={blue}>New Target</BodyText>
                         </TouchableOpacity>
                     </View>
                 </View>
