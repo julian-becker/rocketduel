@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import usePlayer from '../hooks/usePlayer';
 import { useTarget } from '../hooks/useTarget';
 import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
-import { BLAST_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust } from '../lib/gameMechanics';
+import { IMPACT_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 
 import * as turf from '@turf/turf';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -20,6 +20,8 @@ const GameScreen = () => {
     const [impact, setImpact] = useState({
         isLanded: false,
         isAHit: false,
+        isAKill: false,
+        damage: 0,
         distance: 0,
         proximity: 0,
         time: 0,
@@ -46,9 +48,12 @@ const GameScreen = () => {
             azimuth: azimuth,
             height: Number(altitude)
         });
+        const damage = calculateDamage(impact.proximity);
         setImpact({
             isLanded: true,
-            isAHit: impact.proximity <= BLAST_RADIUS,
+            isAHit: impact.proximity <= IMPACT_RADIUS,
+            isAKill: damage >= target.health,
+            damage: damage,
             distance: Math.round(impact.distance),
             proximity:  Math.round(impact.proximity),
             time:  Math.round(impact.time)
@@ -66,11 +71,11 @@ const GameScreen = () => {
     }
 
     const impactPanel = () => {
-        const { isLanded, isAHit, distance, proximity, time } = impact;
+        const { isLanded, isAKill, damage, distance, proximity, time } = impact;
         if (isLanded) {
             return (
                 <View>
-                    <Text>{`Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target. It was a ${isAHit ? 'HIT!!!' : 'miss'}.`}</Text>
+                    <Text>{`Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target, causing ${damage} damage. ${isAKill ? 'It was destroyed!' : ''}.`}</Text>
                 </View>
             )
         }
@@ -121,7 +126,7 @@ const GameScreen = () => {
                             <BodyText bold align='center' color={white}>Fire</BodyText>
                         </Button>
                         <TouchableOpacity onPress={() => navigation.goBack()} >
-                            <BodyText align='center' color={blue}>Regenerate Target</BodyText>
+                            <BodyText align='center' color={blue}>Quit</BodyText>
                         </TouchableOpacity>
                     </View>
                 </View>

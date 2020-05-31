@@ -1,12 +1,9 @@
-import { BLAST_RADIUS } from '../lib/gameMechanics';
-
 const DEFAULT_STATE = {
   "coords": null, // projectile coords are only set on impact
   "azimuth": 0,
   "elevation": 0,
   "altitude": 0,
   "thrust": 0,
-  "blastRadius": BLAST_RADIUS, //in meters
   "isInFlight": false,
   "isLanded": false
 }

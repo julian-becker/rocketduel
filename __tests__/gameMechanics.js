@@ -8,14 +8,14 @@ import {
   MIN_MORTAR_ELEVATION,
   MAX_THRUST,
   MIN_THRUST,
-  azimuthToBearing,
+  calculateDamage,
   calculateImpact, 
   convertThrust, 
   getImpactCoords, 
   getImpactProximity, 
   getShotDistance, 
   getShotDuration, 
-  getTrajectory 
+  getTrajectory
 } from '../lib/gameMechanics';
 
 test('calculates minimum and maximum shot distance given game parameters', () => {
@@ -86,3 +86,10 @@ test('records a miss', () => {
   const { proximity } = calculateImpact(params);
   expect(+proximity.toFixed(5)).toBeGreaterThanOrEqual(BLAST_RADIUS);
 });
+
+test('calculates damage', () => {
+  expect(calculateDamage(8)).toBe(681);
+  expect(calculateDamage(35)).toBe(100);
+  expect(calculateDamage(100)).toBe(1);
+  expect(calculateDamage(103)).toBe(0);
+})
