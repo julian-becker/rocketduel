@@ -10,23 +10,21 @@ import { useNavigation } from '@react-navigation/native';
 import { initTarget, targetReducer } from '../hooks/useTarget';
 import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
 import { IMPACT_RADIUS, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
+import { AlertType, DropDownHolder } from '../components/DropDownHolder';
 
-import * as turf from '@turf/turf';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const GameScreen = ({ player }) => {
-    // temporary, to report impact back to the screen
-    const defaultImpactState = {
-        isLanded: false,
-        isAHit: false,
-        isAKill: false,
-        damage: 0,
-        distance: 0,
-        proximity: 0,
-        time: 0,
-    };
-    const [impact, setImpact] = useState(defaultImpactState);
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  useEffect(() => {
+    const onClose = (data) => {
+      data.type === 'success' ? navigation.navigate('YouWin') : null
+    }
+    DropDownHolder.setOnClose(onClose)
+    return function cleanup() {
+      DropDownHolder.setOnClose(() => undefined);
+    }
+  });
     const { coords, altitude } = player.location;
     const [ target, dispatchTarget ] = useReducer(targetReducer, coords, initTarget);
     const [ projectile, dispatch ] = useReducer(projectileReducer, initialProjectileState);
@@ -47,16 +45,24 @@ const GameScreen = ({ player }) => {
             height: Number(altitude)
         });
         const damage = calculateDamage(impact.proximity);
+        const distance = Math.round(impact.distance);
+        const proximity = Math.round(impact.proximity);
+        const time = Math.round(impact.time);
         dispatchTarget({type: 'UPDATE_HEALTH', value: damage});
-        setImpact({
-            isLanded: true,
-            isAHit: impact.proximity <= IMPACT_RADIUS,
-            isAKill: damage >= target.health,
-            damage: damage,
-            distance: Math.round(impact.distance),
-            proximity:  Math.round(impact.proximity),
-            time:  Math.round(impact.time)
-        })
+        const isAHit = impact.proximity <= IMPACT_RADIUS;
+        const isAKill = damage >= target.health;
+        let alertType:AlertType = 'info';
+        if (isAHit) {
+          alertType = 'warn';
+        }
+        if (isAKill) {
+          alertType = 'success';
+        }
+        const alertTitle = isAHit ? 'Hit!!!' : 'Miss';
+        const alertMessage = `Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target. `;
+        const alertMissMessage = alertMessage + `It was a miss.`
+        const alertHitMessage = alertMessage + `It's a hit! You did ${damage} damage. ${isAKill ? 'Target is destroyed!' : ''}`;
+        DropDownHolder.alert(alertType, alertTitle, isAHit ? alertHitMessage : alertMissMessage)
     }
 
     const onChangeInput = (value, parameter = 'azimuth') => {
@@ -70,20 +76,7 @@ const GameScreen = ({ player }) => {
     }
 
     const regenerateTarget = (coords: Array<number>) => {
-        // clear current impact, if any
-        setImpact(defaultImpactState);
         dispatchTarget({type: 'REGENERATE_TARGET', value: coords});
-    }
-
-    const impactPanel = () => {
-        const { isLanded, damage, distance, proximity, time } = impact;
-        if (isLanded) {
-            return (
-                <View>
-                    <Text>{`Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target, causing ${damage} damage.`}</Text>
-                </View>
-            )
-        }
     }
 
     const targetPanel = () => {
@@ -95,6 +88,7 @@ const GameScreen = ({ player }) => {
                     <BodyText accessibilityID='targetCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
                     <BodyText accessibilityID='targetDistance'>{distance} meters</BodyText>
                     <BodyText accessibilityID='targetBearing'>{azimuth} &deg;</BodyText>
+                    <BodyText accessibilityID='targetHealth'>{health}</BodyText>
                     <BodyText color={isDestroyed ? red : black} accessibilityID='targetHealth'>{target.isDestroyed ? `Destroyed` : `Health: ${target.health}`}</BodyText>
                 </View>
             )
@@ -121,9 +115,6 @@ const GameScreen = ({ player }) => {
             <View style={styles.interior}>
                 {/* launcher half */}
                 <View style={styles.launcherSide}>
-                    <View style={styles.impactPanel}>
-                        {impactPanel()}
-                    </View>
                     <View style={styles.launcher}>
                         <BodyText>Launcher goes here</BodyText>
                     </View>
@@ -188,13 +179,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column'
     },
-    impactPanel: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     launcher: {
-        flex: 4,
+        flex: 5,
         alignItems: 'center',
         justifyContent: 'center'
     },
