@@ -6,6 +6,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 import HomeScreen from './screens/Home';
 import GameWrapper from './screens/GameWrapper';
 import YouWin from './screens/YouWin';
+import { blue, green, red } from './components/styled/Colors';
 
 import { DropDownHolder } from './components/DropDownHolder';
 
@@ -25,6 +26,9 @@ const App = () => {
         ref={(ref) => DropDownHolder.setDropDown(ref)}
         closeInterval={4000}
         onClose={(data) => DropDownHolder.invokeOnClose(data)}
+        successColor={green}
+        infoColor={blue}
+        errorColor={red}
       />
     </NavigationContainer>
   );

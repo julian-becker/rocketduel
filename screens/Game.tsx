@@ -51,9 +51,9 @@ const GameScreen = ({ player }) => {
         dispatchTarget({type: 'UPDATE_HEALTH', value: damage});
         const isAHit = impact.proximity <= IMPACT_RADIUS;
         const isAKill = damage >= target.health;
-        let alertType:AlertType = 'info';
+        let alertType:AlertType = 'error';
         if (isAHit) {
-          alertType = 'warn';
+          alertType = 'info';
         }
         if (isAKill) {
           alertType = 'success';
