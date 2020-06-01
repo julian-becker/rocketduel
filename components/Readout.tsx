@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
+import { isEmulatorSync } from 'react-native-device-info';
 import { Header } from './styled/Text';
 
 const Readout = (props) => {
@@ -12,13 +13,16 @@ const Readout = (props) => {
   return (
     <View>
       <Header>{header}:</Header>
-      <TextInput
-        style={styles.input}
-        onChangeText={text => handleChangeText(text)}
-        defaultValue="0"
-        autoCorrect={false}
-        keyboardType={"numeric"}
-      />
+      {isEmulatorSync() ? 
+        <TextInput
+          style={styles.input}
+          onChangeText={text => handleChangeText(text)}
+          defaultValue="0"
+          autoCorrect={false}
+          keyboardType={"numeric"}
+        />
+      : null
+      }
     </View>
 
   )
