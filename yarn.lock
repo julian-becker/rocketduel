@@ -7055,6 +7055,14 @@ prompts@^2.0.1, prompts@^2.2.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
+prop-types@15.5.10:
+  version "15.5.10"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
+  integrity sha1-J5ffwxJhguOpXj37suiT3ddFYVQ=
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.3.1"
+
 prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
@@ -7181,6 +7189,13 @@ react-native-appstate-hook@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-native-appstate-hook/-/react-native-appstate-hook-1.0.4.tgz#2d0f0b58464f2fa2afa7c569f84cccf1b9f49da2"
   integrity sha512-CBTKswnDovcSQdWEvjS69NZLgqIx6rONzL8+R7Kbp1NIDUBbJuow+RMCZD5mQC1xGRPwVpfCR/dK9C1oLo1sZg==
+
+react-native-dropdownalert@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-dropdownalert/-/react-native-dropdownalert-4.2.1.tgz#e49ca7b37fde4582aaecc6d241828e907c18a520"
+  integrity sha512-FaGAnL4LMzVqM3a/qjkk5z/YlbJ4pQVv0a+x/06h0BwWFXUvii4RFt+6KRgYn7ZzZQo78SJcWVDCpqxjTKSZHw==
+  dependencies:
+    prop-types "15.5.10"
 
 react-native-gesture-handler@^1.6.1:
   version "1.6.1"
