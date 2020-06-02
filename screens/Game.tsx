@@ -89,7 +89,6 @@ const GameScreen = ({ player }) => {
           <BodyText accessibilityID='targetCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
           <BodyText accessibilityID='targetDistance'>{distance} meters</BodyText>
           <BodyText accessibilityID='targetBearing'>{azimuth} &deg;</BodyText>
-          <BodyText accessibilityID='targetHealth'>{health}</BodyText>
           <BodyText color={isDestroyed ? red : black} accessibilityID='targetHealth'>{target.isDestroyed ? `Destroyed` : `Health: ${target.health}`}</BodyText>
         </View>
       )
