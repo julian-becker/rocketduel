@@ -5,7 +5,7 @@ import { BodyText, Header } from './styled/Text';
 import { MIN_MORTAR_ELEVATION } from '../lib/gameMechanics';
 
 const Elevation = (props) => {
-  const { elevation } = props;
+  const elevation = props.value;
   const handleChangeText = (text: string) => {
     props.onChangeText(text);
   }

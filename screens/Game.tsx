@@ -7,6 +7,7 @@ import Container from '../components/styled/Container'
 import { BodyText, ButtonText, Header } from '../components/styled/Text';
 import Button from '../components/styled/Button';
 import { blue, black, red, white } from '../components/styled/Colors';
+import useCompass from '../hooks/useCompass';
 import { useNavigation } from '@react-navigation/native';
 
 import { initTarget, targetReducer } from '../hooks/useTarget';
@@ -18,7 +19,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const GameScreen = (props) => {
   const navigation = useNavigation();
+  // start getting compass data
   const { player, dispatchPlayer } = props;
+  useCompass(dispatchPlayer);
+
   useEffect(() => {
     const onClose = (data) => {
       data.type === 'success' ? navigation.navigate('YouWin') : null
@@ -104,8 +108,7 @@ const GameScreen = (props) => {
       return (
         <View style={styles.playerLocation}>
           <Header>Your Location</Header>
-          <BodyText accessibilityID='playerLatitude'>{coords[0]}</BodyText>
-          <BodyText accessibilityID='playerLongitude'>{coords[1]}</BodyText>
+          <BodyText accessibilityID='playerCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
         </View>
       )
     } else {

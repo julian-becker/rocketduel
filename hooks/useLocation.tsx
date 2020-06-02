@@ -3,7 +3,6 @@ import * as Location from 'expo-location';
 
 const useLocation = (dispatch: Function) => {
 
-  //console.log(player);
   useEffect(() => {
     const getLocation = async () => {
       const watchFunction = await Location.watchPositionAsync({
