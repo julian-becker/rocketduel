@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import Slider from '@react-native-community/slider';
-import Readout from '../components/Readout';
+import Azimuth from '../components/Azimuth';
+import Elevation from '../components/Elevation';
 import Container from '../components/styled/Container'
 import { BodyText, ButtonText, Header } from '../components/styled/Text';
 import Button from '../components/styled/Button';
@@ -15,8 +16,9 @@ import { AlertType, DropDownHolder } from '../components/DropDownHolder';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const GameScreen = ({ player }) => {
+const GameScreen = (props) => {
   const navigation = useNavigation();
+  const { player, dispatchPlayer } = props;
   useEffect(() => {
     const onClose = (data) => {
       data.type === 'success' ? navigation.navigate('YouWin') : null
@@ -26,10 +28,11 @@ const GameScreen = ({ player }) => {
       DropDownHolder.setOnClose(() => undefined);
     }
   });
-  const { coords, altitude } = player.location;
+  const { location, elevation, azimuth } = player;
+  const { coords, altitude } = location;
   const [ target, dispatchTarget ] = useReducer(targetReducer, coords, initTarget);
   const [ projectile, dispatch ] = useReducer(projectileReducer, initialProjectileState);
-  const { thrust, elevation, azimuth } = projectile;
+  const { thrust } = projectile;
 
   const setThrust = (thrust) => {
     dispatch({type: 'UPDATE_THRUST', value: thrust});
@@ -134,13 +137,13 @@ const GameScreen = ({ player }) => {
           </View>
           <View style={styles.stats}>
             {locationPanel()}
-            <Readout
-              name='Azimuth'
-              onChangeText={text => onChangeInput(text, 'azimuth')}
+            <Azimuth
+              value={azimuth}
+              onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_AZIMUTH', value: Number(text)})}
             />
-            <Readout
-              name='Elevation'
-              onChangeText={text => onChangeInput(text, 'elevation')}
+            <Elevation
+              value={elevation}
+              onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_ELEVATION', value: Number(text)})}
             />
           </View>
           <View style={styles.thrust}>

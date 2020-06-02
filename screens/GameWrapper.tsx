@@ -1,5 +1,5 @@
 // Wrapper screen for permissions checking, etc before loading the game
-import React from 'react';
+import React, { useReducer } from 'react';
 import {
     ActivityIndicator,
     Button,
@@ -9,13 +9,16 @@ import {
 } from 'react-native';
 
 import GameScreen from './Game';
-import usePlayer from '../hooks/usePlayer';
+import { DEFAULT_STATE as initialPlayerState, playerReducer } from '../hooks/usePlayer';
+import useLocation from '../hooks/useLocation';
 import usePermissions from '../hooks/usePermissions';
 import useAppState from 'react-native-appstate-hook';
 
 const GameWrapper = () => {
   const permission = usePermissions('LOCATION');
-  const player = usePlayer();
+  const [player, dispatchPlayer ] = useReducer(playerReducer, initialPlayerState);
+  // start getting location
+  useLocation(dispatchPlayer);
   const { appState } = useAppState({
     onChange: (newAppState) => { newAppState === 'active' && permission.isDenied ? permission.ask() : null }
   });
@@ -37,7 +40,7 @@ const GameWrapper = () => {
   }
   if (permission.isGranted) {
     // render game screen
-    return player.isLocated ? <GameScreen player={player} /> : <ActivityIndicator size="large" color="#22222" />;
+    return player.isLocated ? <GameScreen player={player} dispatchPlayer={dispatchPlayer}/> : <ActivityIndicator size="large" color="#22222" />;
   } else if (permission.isDenied) {
     // render permission denied screen
     return permissionDeniedMessage();
