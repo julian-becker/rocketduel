@@ -1,7 +1,6 @@
 import { useEffect, useReducer } from 'react';
 import { isEmulatorSync } from 'react-native-device-info';
 import CompassHeading from 'react-native-compass-heading';
-import { DEFAULT_STATE, playerReducer } from './usePlayer';
 
 const useCompass = (dispatch: Function) => {
 

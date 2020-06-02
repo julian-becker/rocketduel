@@ -8,6 +8,7 @@ import { BodyText, ButtonText, Header } from '../components/styled/Text';
 import Button from '../components/styled/Button';
 import { blue, black, red, white } from '../components/styled/Colors';
 import useCompass from '../hooks/useCompass';
+import useGyroscope from '../hooks/useGyroscope';
 import { useNavigation } from '@react-navigation/native';
 
 import { initTarget, targetReducer } from '../hooks/useTarget';
@@ -22,7 +23,7 @@ const GameScreen = (props) => {
   // start getting compass data
   const { player, dispatchPlayer } = props;
   useCompass(dispatchPlayer);
-
+  useGyroscope(dispatchPlayer);
   useEffect(() => {
     const onClose = (data) => {
       data.type === 'success' ? navigation.navigate('YouWin') : null
