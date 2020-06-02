@@ -21,7 +21,27 @@ jest.mock('expo-permissions', () => ({
   askAsync: jest.fn().mockReturnValue({"ask": jest.fn(), "isChecking": false, "isDenied": false, "isGranted": true, "isUndetermined": false, "status": "granted"})
 })); 
 
+jest.mock('react-native-device-info', () => {
+  return {
+    isEmulatorSync: true
+  }
+});
+
+jest.mock('react-native-compass-heading', () => ({
+  CompassHeading: jest.fn()
+}));
+
+jest.mock('expo-sensors', () => ({
+  Accelerometer: jest.fn()
+}));
+
+jest.mock('expo-location', () => ({
+  Accuracy: {Highest: true},
+  watchPositionAsync: jest.fn()
+}));
+
 test('renders the app correctly', async () => {
+
     const { debug, getByTestId, getByText } = render(<App />);
     
     const newGameButton = getByText('New Game');

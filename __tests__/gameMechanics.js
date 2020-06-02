@@ -88,8 +88,8 @@ test('records a miss', () => {
 });
 
 test('calculates damage', () => {
-  expect(calculateDamage(8)).toBe(681);
+  expect(calculateDamage(8)).toBe(296);
   expect(calculateDamage(35)).toBe(100);
-  expect(calculateDamage(100)).toBe(1);
-  expect(calculateDamage(103)).toBe(0);
+  expect(calculateDamage(103)).toBe(6);
+  expect(calculateDamage(153)).toBe(0);
 })

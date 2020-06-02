@@ -24,8 +24,8 @@ const MAX_THRUST = 241.25;
 
 // data on projectiles; uses mortar round as baseline
 const BLAST_RADIUS = 35; // meters
-const IMPACT_RADIUS = 100; // beyond this, targets should take no damage
-const DAMAGE_SCALE_FACTOR = 14.1; // designed to set BLAST_RADIUS as kill
+const IMPACT_RADIUS = 150; // beyond this, targets should take no damage
+const DAMAGE_SCALE_FACTOR = 24.95; // designed to set BLAST_RADIUS as kill
 const P_WEIGHT = 4.5; // kg
 const P_DIAMETER = 81; // mm
 const P_SURFACE_AREA = (Math.PI * (P_DIAMETER / 2) ** 2) * 1000 // m^2
