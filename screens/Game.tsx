@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Slider from '@react-native-community/slider';
 import Azimuth from '../components/Azimuth';
 import Elevation from '../components/Elevation';
@@ -39,7 +40,13 @@ const GameScreen = (props) => {
   const [ projectile, dispatch ] = useReducer(projectileReducer, initialProjectileState);
   const { thrust } = projectile;
 
-  const setThrust = (thrust) => {
+  const setThrust = async (thrust) => {
+    const options = {
+      enableVibrateFallback: false,
+      ignoreAndroidSystemSettings: false
+    };
+    
+    ReactNativeHapticFeedback.trigger('selection', options);
     dispatch({type: 'UPDATE_THRUST', value: thrust});
   }
 
@@ -157,7 +164,7 @@ const GameScreen = (props) => {
               maximumValue={100}
               step={1}
               value={projectile.thrust}
-              onSlidingComplete={setThrust}
+              onValueChange={setThrust}
             />
             <BodyText>Thrust: {projectile.thrust}</BodyText>
           </View>
