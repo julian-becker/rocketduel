@@ -15,6 +15,7 @@
     "@turf/turf": "^5.1.6",
     "expo": "~37.0.3",
     "expo-permissions": "^8.1.0",
+    "expo-sensors": "^8.1.0",
     "expo-updates": "~0.2.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
