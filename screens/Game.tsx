@@ -133,9 +133,7 @@ const GameScreen = (props) => {
             <BodyText>Launcher goes here</BodyText>
           </View>
           <View style={styles.buttons}>
-            <Button onPress={() => onPressFire()} >
-              <ButtonText bold align='center' color={white}>Fire</ButtonText>
-            </Button>
+            <Button bold text='Fire' textColor={white} backgroundColor={red} onClick={() => onPressFire()}/>
             <TouchableOpacity onPress={() => regenerateTarget(coords)} >
               <BodyText align='center' color={blue}>New Target</BodyText>
             </TouchableOpacity>

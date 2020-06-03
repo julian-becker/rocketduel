@@ -1,8 +1,29 @@
-import styled from 'styled-components/native'
-
+import React from 'react';
+import styled from 'styled-components';
+import { ButtonText } from './Text';
 import { black, red } from './Colors'
 
-export default Button = styled.TouchableOpacity`
+const Button = ({
+  clickData,
+  text,
+  bold,
+  textColor,
+  backgroundColor,
+  onClick,
+  accessibilityId
+}) => {
+  return (
+    <ButtonWrap
+      onPress={() => onClick(clickData)}
+      accessibilityId={accessibilityId}
+      backgroundColor={backgroundColor}
+    >
+      <ButtonText bold={bold} color={textColor}>{text}</ButtonText>
+    </ButtonWrap>
+  )
+}
+
+const ButtonWrap = styled.TouchableOpacity`
 width: 100%;
 background-color: ${props => props.backgroundColor};
 height: 60px;
@@ -13,7 +34,4 @@ align-items: center;
 elevation: 5;
 box-shadow: 1px 2px 2px ${black};
 `
-
-Button.defaultProps = {
-  backgroundColor: red
-}
+export default Button;

@@ -1,40 +1,51 @@
 import React from 'react';
-import { Button, Linking, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Container from '../components/styled/Container'
-import NewGameButton from '../components/NewGameButton';
+import Button from '../components/styled/Button';
+import LocationDenied from '../components/LocationDenied';
 import usePermissions from '../hooks/usePermissions';
-
-const appSettingsPrompt = () => {
-    return (
-        <Text>Rocket Duel needs access to your GPS so you can play the game. Open the <Button title="Settings" onPress={() => { Linking.openSettings();}}>Settings</Button> on your phone to allow them.</Text>
-    )
-}
+import { red, white } from '../components/styled/Colors'
 
 const HomeScreen = () => {
-    const permission = usePermissions('LOCATION');
-    return (
-        <Container>
-            <View style={styles.header}>
-                <Text style={styles.title} testID="welcomeText">Welcome to Rocket Duel</Text>
-            </View>
-            <View style={styles.actions}>
-            { permission.isDenied ? appSettingsPrompt() : <NewGameButton /> }
-            </View>
-        </Container>
-    );
+  const permission = usePermissions('LOCATION');
+  const navigation = useNavigation();
+
+  const handleOnPress = () => {
+    permission.isGranted ? navigation.navigate('Game') : navigation.navigate('Setup');
+  }
+
+  return (
+    <Container>
+      <View style={styles.header}>
+        <Text style={styles.title} testID="welcomeText">Welcome to Rocket Duel</Text>
+      </View>
+      <View style={styles.body}>
+        { permission.isDenied ? <LocationDenied /> : null }
+      </View>
+      <View style={styles.actions}>
+        { permission.isDenied ? null : <Button text='New Game' textColor={white} backgroundColor={red} onClick={() => handleOnPress()}/> }
+      </View>
+    </Container>
+  );
 };
 
 const styles = StyleSheet.create({
-    header: {
-        flex: 3,
-        alignItems: 'center'
-    },
-    title: {
-        fontSize: 25
-    },
-    actions: {
-        flex: 1
-    }
+  header: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  body: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 25
+  },
+  actions: {
+    flex: 1
+  }
 });
 
 export default HomeScreen;

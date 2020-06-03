@@ -1,18 +1,24 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { BodyText, Header } from '../components/styled/Text';
 import Container from '../components/styled/Container'
-import NewGameButton from '../components/NewGameButton';
+import Button from '../components/styled/Button';
+import { red, white } from '../components/styled/Colors'
 
 const YouWin = () => {
+  const navigation = useNavigation();
+  const handleOnPress = () => {
+    navigation.navigate('Game');
+  }
   return (
     <Container>
         <View style={styles.header}>
-            <Header accessibilityID="youWinHeader">You Win!</Header>
-            <BodyText accessibilityId="youWinBodyText">The target was destroyed.</BodyText>
+          <Header accessibilityID="youWinHeader">You Win!</Header>
+          <BodyText accessibilityId="youWinBodyText">The target was destroyed.</BodyText>
         </View>
         <View style={styles.actions}>
-        <NewGameButton />
+          <Button text='New Game' textColor={white} backgroundColor={red} onClick={() => handleOnPress()}/>
         </View>
     </Container>
   );
