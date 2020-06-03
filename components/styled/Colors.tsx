@@ -1,5 +1,5 @@
 const silver = {
-  metallic: 'hsla(228, 3%, 68%, 1)',
+  metallic: 'rgba(168, 169, 173, 1)',
   roman: 'rgba((131, 137, 150, 1)',
   gunmetal: 'rgba((42, 52, 57, 1)',
   darkGunmetal: 'rgba((31, 38, 42, 1)' 
