@@ -13,13 +13,16 @@ const Elevation = (props) => {
     <View>
       <Header>Elevation:</Header>
       {isEmulatorSync() ? 
-        <TextInput
-          style={styles.input}
-          onChangeText={text => handleChangeText(text)}
-          defaultValue={MIN_MORTAR_ELEVATION.toString()}
-          autoCorrect={false}
-          keyboardType={"numeric"}
-        />
+        <View style={{ height: 36}}>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => handleChangeText(text)}
+            defaultValue={MIN_MORTAR_ELEVATION.toString()}
+            autoCorrect={false}
+            keyboardType={"numeric"}
+            underlineColorAndroid='transparent'
+          />
+        </View>
       : <BodyText>{elevation}</BodyText>
       }
     </View>
@@ -29,7 +32,6 @@ const Elevation = (props) => {
 
 const styles = StyleSheet.create({
   input: {
-    height: 30,
     width: 100,
     borderColor: 'gray',
     borderWidth: 1

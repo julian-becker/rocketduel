@@ -16,12 +16,14 @@ const BodyText = styled(props => <Text {...props} />)`
 `;
 
 const ButtonText = styled(props => <Text {...props} />)`
-  ${Platform.OS === 'ios' ? human.title1Object : material.buttonObject};
+  ${Platform.OS === 'ios' ? human.title1Object : material.titleObject};
+  ${systemWeights.semibold}
   ${BaseTextStyles}
 `;
 
 const Header = styled(props => <Text {...props} />)`
-  ${Platform.OS === 'ios' ? human.headlineObject : material.headlineObject};
+  ${Platform.OS === 'ios' ? human.headlineObject : material.subheadingObject};
+  ${systemWeights.bold}
   ${BaseTextStyles}
 `;
 

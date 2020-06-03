@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Slider from '@react-native-community/slider';
 import Azimuth from '../components/Azimuth';
@@ -45,7 +45,6 @@ const GameScreen = (props) => {
       enableVibrateFallback: false,
       ignoreAndroidSystemSettings: false
     };
-    
     ReactNativeHapticFeedback.trigger('selection', options);
     dispatch({type: 'UPDATE_THRUST', value: thrust});
   }
@@ -144,28 +143,30 @@ const GameScreen = (props) => {
           <View style={styles.map}>
             {targetPanel()}
           </View>
-          <View style={styles.stats}>
-            {locationPanel()}
-            <Azimuth
-              value={azimuth}
-              onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_AZIMUTH', value: Number(text)})}
-            />
-            <Elevation
-              value={elevation}
-              onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_ELEVATION', value: Number(text)})}
-            />
-          </View>
-          <View style={styles.thrust}>
-            <Slider
-              style={styles.thrustSlider}
-              minimumValue={0}
-              maximumValue={100}
-              step={1}
-              value={projectile.thrust}
-              onValueChange={setThrust}
-            />
-            <BodyText>Thrust: {projectile.thrust}</BodyText>
-          </View>
+          <KeyboardAvoidingView style={{flex: 3, justifyContent: 'flex-start' }}>
+            <View style={styles.stats}>
+              {locationPanel()}
+              <Azimuth
+                value={azimuth}
+                onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_AZIMUTH', value: Number(text)})}
+              />
+              <Elevation
+                value={elevation}
+                onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_ELEVATION', value: Number(text)})}
+              />
+            </View>
+            <View style={styles.thrust}>
+              <Slider
+                style={styles.thrustSlider}
+                minimumValue={0}
+                maximumValue={100}
+                step={1}
+                value={projectile.thrust}
+                onValueChange={setThrust}
+              />
+              <BodyText>Thrust: {projectile.thrust}</BodyText>
+            </View>
+          </KeyboardAvoidingView>
         </View>
       </View>
     </Container>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   stats: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   playerLocation: {
     alignItems: 'center',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   thrust: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   thrustSlider: {
     width: '100%',

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { isEmulatorSync } from 'react-native-device-info';
 import { Accelerometer } from 'expo-sensors';
 
 const useGyroscope = (dispatch: Function) => {
@@ -6,7 +7,7 @@ const useGyroscope = (dispatch: Function) => {
   useEffect(() => {
     const getGyroscope = async () => {
       const isGyroscopeAvailable = await Accelerometer.isAvailableAsync();
-      if (isGyroscopeAvailable) {
+      if (isGyroscopeAvailable && !isEmulatorSync()) {
         Accelerometer.setUpdateInterval(200);
         const _subscription = Accelerometer.addListener(data => {
           // data in the form of { x, y, z } - We only care about y

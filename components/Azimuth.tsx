@@ -12,13 +12,16 @@ const Azimuth = (props) => {
     <View>
       <Header>Azimuth:</Header>
       {isEmulatorSync() ? 
-        <TextInput
-          style={styles.input}
-          onChangeText={text => handleChangeText(text)}
-          defaultValue={azimuth.toString()}
-          autoCorrect={false}
-          keyboardType={"numeric"}
-        />
+        <View style={{ height: 36}}>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => handleChangeText(text)}
+            defaultValue={azimuth.toString()}
+            autoCorrect={false}
+            keyboardType={"numeric"}
+            underlineColorAndroid='transparent'
+          />
+        </View>
       : <BodyText>{azimuth}</BodyText>
       }
     </View>
@@ -27,7 +30,6 @@ const Azimuth = (props) => {
 
 const styles = StyleSheet.create({
   input: {
-    height: 30,
     width: 100,
     borderColor: 'gray',
     borderWidth: 1
