@@ -37,6 +37,7 @@ buck-out/
 android/.gradle/
 android/.idea/
 /android/app/debug/
+android/app/release/
 
 # fastlane
 #
