@@ -17,6 +17,8 @@ const useGyroscope = (dispatch: Function) => {
           // when y is 0, that's 0 elevation.
           // fwiw, y of 1 is when the phone is facing directly down
           // Android makes you work for it. 
+          // Android data comes from
+          // https://stackoverflow.com/questions/58521498/react-native-how-to-compute-x-y-and-z-axis-rotation-angles-based-on-gyroscope
 
           // data in the form of { x, y, z }
           const { x, y, z } = data;
