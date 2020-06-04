@@ -1,10 +1,10 @@
 {
-  "name": "rocketduel",
-  "displayName": "rocketduel",
+  "name": "mekablitz",
+  "displayName": "M.E.K.A. Blitz",
   "expo": {
-    "name": "rocketduel",
-    "slug": "rocketduel",
-    "version": "1.0.0",
+    "name": "M.E.K.A. Blitz",
+    "slug": "mekablitz",
+    "version": "1.0.1",
     "platforms": [
       "ios",
       "android",
