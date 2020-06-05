@@ -22,7 +22,7 @@ const ButtonText = styled(props => <Text {...props} />)`
 `;
 
 const Header = styled(props => <Text {...props} />)`
-  ${Platform.OS === 'ios' ? human.headlineObject : material.subheadingObject};
+  ${Platform.OS === 'ios' ? human.title1Object : material.subheadingObject};
   ${systemWeights.bold}
   ${BaseTextStyles}
 `;

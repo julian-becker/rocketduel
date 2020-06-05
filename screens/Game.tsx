@@ -99,7 +99,7 @@ const GameScreen = (props) => {
       const { coords, distance, azimuth, health, isDestroyed } = target;
       return (
         <View>
-          <Header>Target:</Header>
+          <Header>🤖 Sighted!</Header>
           <BodyText accessibilityID='targetCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
           <BodyText accessibilityID='targetDistance'>{distance} meters</BodyText>
           <BodyText accessibilityID='targetBearing'>{azimuth} &deg;</BodyText>

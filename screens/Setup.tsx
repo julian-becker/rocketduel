@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
 import usePermissions from '../hooks/usePermissions';
 import { useNavigation } from '@react-navigation/native';
 import { BodyText, Header } from '../components/styled/Text';
@@ -15,12 +15,21 @@ const Setup = () => {
     navigation.navigate('Game');
   }
 
+  const openPrivacyPolicy = async () => {
+    await Linking.openURL('https://mekablitz.com/privacypolicy');
+  }
+
   const permissionHeader = () => {
     return (
-      <View style={styles.header}>
-        <Header accessibilityID="getStartedHeader">Let's Get Started</Header>
-        <BodyText accessibilityId="getStartedBodyText">Rocket Duel will need access to your device's location to play the game. Don't worry, we don't store this information anywhere and we won't use it to try and identify you or provide it to third parties. For more information, check out our Privacy Policy. </BodyText>
-    </View>
+      <View style={{flex: 3}}>
+        <View style={styles.header}>
+          <Header accessibilityID="getStartedHeader">Let's Get Started</Header>
+        </View>
+        <View style={styles.body}>
+          <BodyText accessibilityId="getStartedBodyText">Rocket Duel will need access to your device's location to play the game. Don't worry, we don't store this information anywhere and we won't use it to try and identify you or provide it to third parties. For more information, check out our privacy policy:</BodyText><TouchableOpacity onPress={() => openPrivacyPolicy()}><BodyText color={blue}>M.E.K.A. Blitz Privacy Policy</BodyText></TouchableOpacity>
+        </View>
+      </View>
+
     )
   }
 
@@ -49,9 +58,13 @@ const Setup = () => {
 
 const styles = StyleSheet.create({
   header: {
-      flex: 3,
-      justifyContent: 'center',
-      alignItems: 'center'
+    flex: 1,
+    alignItems: 'center'
+  },
+  body: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   actions: {
       flex: 1
