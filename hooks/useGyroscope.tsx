@@ -9,7 +9,7 @@ const useGyroscope = (dispatch: Function) => {
     const getGyroscope = async () => {
       const isGyroscopeAvailable = await Accelerometer.isAvailableAsync();
       if (isGyroscopeAvailable && !isEmulatorSync()) {
-        Accelerometer.setUpdateInterval(1000);
+        Accelerometer.setUpdateInterval(100);
         const _subscription = Accelerometer.addListener(data => {
           // iOS and Android report these values differently
           // iOS reports pitch as the y value, in degrees
