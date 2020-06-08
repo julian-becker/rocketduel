@@ -28,7 +28,7 @@ const App = () => {
         ref={(ref) => DropDownHolder.setDropDown(ref)}
         closeInterval={4000}
         onClose={(data) => DropDownHolder.invokeOnClose(data)}
-        successColor={green}
+        successColor={green.forest}
         infoColor={blue}
         errorColor={red}
       />

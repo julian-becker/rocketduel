@@ -13,7 +13,7 @@ const useLocation = (dispatch: Function) => {
         const mappedLocation = {
           "accuracy": accuracy, 
           "altitude": altitude,
-          "coords": [latitude, longitude],
+          "coords": [longitude, latitude],
           "heading": heading,
           "speed": speed
         }

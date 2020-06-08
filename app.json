@@ -13,5 +13,8 @@
     "assetBundlePatterns": [
       "**/*"
     ]
+  },
+  "mapbox": {
+    "apiKey": "pk.eyJ1IjoibWVrYWJsaXR6IiwiYSI6ImNrYjNvcnN1eTBwN2oyb3BhMWppOG5ocG4ifQ.rSVGyLGG_0Uyq35L-dolAQ"
   }
 }

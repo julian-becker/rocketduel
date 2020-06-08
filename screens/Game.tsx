@@ -1,9 +1,12 @@
 import React, { useEffect, useReducer } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { isEmulatorSync } from 'react-native-device-info';
 import Slider from '@react-native-community/slider';
+import MapPanel from '../components/MapPanel';
 import Azimuth from '../components/Azimuth';
 import Elevation from '../components/Elevation';
+import ManualThrust from '../components/ManualThrust';
 import Container from '../components/styled/Container'
 import { BodyText, ButtonText, Header } from '../components/styled/Text';
 import Button from '../components/styled/Button';
@@ -59,6 +62,7 @@ const GameScreen = (props) => {
       azimuth: azimuth,
       height: Number(altitude)
     });
+
     const damage = calculateDamage(impact.proximity);
     const distance = Math.round(impact.distance);
     const proximity = Math.round(impact.proximity);
@@ -96,27 +100,8 @@ const GameScreen = (props) => {
 
   const targetPanel = () => {
     if (target && target.coords) {
-      const { coords, distance, azimuth, health, isDestroyed } = target;
       return (
-        <View>
-          <Header>🤖 Sighted!</Header>
-          <BodyText accessibilityID='targetCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
-          <BodyText accessibilityID='targetDistance'>{distance} meters</BodyText>
-          <BodyText accessibilityID='targetBearing'>{azimuth} &deg;</BodyText>
-          <BodyText color={isDestroyed ? red : black} accessibilityID='targetHealth'>{target.isDestroyed ? `Destroyed` : `Health: ${target.health}`}</BodyText>
-        </View>
-      )
-    } else {
-      return <ActivityIndicator />
-    }
-  }
-  const locationPanel = () => {
-    if (coords) {
-      return (
-        <View style={styles.playerLocation}>
-          <Header>Your Location</Header>
-          <BodyText accessibilityID='playerCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
-        </View>
+        <MapPanel player={player} target={target} pitch={elevation}/>
       )
     } else {
       return <ActivityIndicator />
@@ -125,50 +110,61 @@ const GameScreen = (props) => {
 
   return (
     <Container>
-      <View style={styles.interior}>
-        {/* launcher half */}
-        <View style={styles.launcherSide}>
-          <View style={styles.launcher}>
-            <BodyText>Launcher goes here</BodyText>
-          </View>
-          <View style={styles.buttons}>
-            <Button bold text='Fire' textColor={white} backgroundColor={red} onClick={() => onPressFire()}/>
-            <TouchableOpacity onPress={() => regenerateTarget(coords)} >
-              <BodyText align='center' color={blue}>New Target</BodyText>
-            </TouchableOpacity>
-          </View>
-      </View>
-      {/* stats half */}
-      <View style={styles.statsSide}>
-          <View style={styles.map}>
-            {targetPanel()}
-          </View>
-          <KeyboardAvoidingView style={{flex: 3, justifyContent: 'flex-start' }}>
+      <KeyboardAvoidingView behavior={'height'} style={{flex: 1, flexDirection: 'column'}}>
+        {/* map view */}
+        <MapPanel style={{flex: 1}} player={player} target={target} />
+        {/* controls view */}
+        <View style={{flex: 1, flexDirection: 'column'}}>
+        { isEmulatorSync() ?
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 5}}>
             <View style={styles.stats}>
-              {locationPanel()}
               <Azimuth
-                value={azimuth}
                 onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_AZIMUTH', value: Number(text)})}
               />
               <Elevation
                 value={elevation}
                 onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_ELEVATION', value: Number(text)})}
               />
-            </View>
-            <View style={styles.thrust}>
-              <Slider
-                style={styles.thrustSlider}
-                minimumValue={0}
-                maximumValue={100}
-                step={1}
-                value={projectile.thrust}
-                onValueChange={setThrust}
+              <ManualThrust
+                value={thrust}
+                onChangeText={(text: string) => dispatchPlayer({type: 'UPDATE_THRUST', value: Number(text)})}
               />
-              <BodyText>Thrust: {projectile.thrust}</BodyText>
             </View>
-          </KeyboardAvoidingView>
+          </View>
+          : null }
+          <View style={{flex: 5, flexDirection: 'row' }}>
+            {/* launcher side */}
+            <View style={styles.launcherSide}>
+              <View style={styles.launcher}>
+                <BodyText>Launcher goes here</BodyText>
+              </View>
+              <View style={styles.buttons}>
+                <Button bold text='Fire' textColor={white} backgroundColor={red} onClick={() => onPressFire()}/>
+                <TouchableOpacity onPress={() => regenerateTarget(coords)} >
+                  <BodyText align='center' color={blue}>New Target</BodyText>
+                </TouchableOpacity>
+              </View>
+            </View>
+            {/* controls view */}
+            { isEmulatorSync() ?
+              null
+            : 
+              <View style={styles.thrust}>
+                <BodyText>{`Azimuth: ${azimuth} Elevation: ${elevation}`}</BodyText>
+                <Slider
+                  style={styles.thrustSlider}
+                  minimumValue={0}
+                  maximumValue={100}
+                  step={1}
+                  value={projectile.thrust}
+                  onValueChange={setThrust}
+                />
+                <BodyText>Thrust: {projectile.thrust}</BodyText>
+              </View>
+            }
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Container>
   );
 }
@@ -182,16 +178,17 @@ const styles = StyleSheet.create({
   },
   launcherSide: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'flex-start'
   },
   launcher: {
-    flex: 5,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
   buttons: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   statsSide: {
@@ -200,12 +197,13 @@ const styles = StyleSheet.create({
     margin: 3
   },
   map: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center',
     justifyContent: 'flex-start'
   },
   stats: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start'
   },

@@ -13,6 +13,7 @@ const DEFAULT_STATE = {
 const initTarget = (coords: Array<number>) => {
   const distance = getRandomInt(MIN_DISTANCE, MAX_DISTANCE);
   const azimuth = getRandomInt(0, 360);
+
   const origin = turf.point(coords);
   // turf expects bearing in range ( -180, 180 )
   const targetLocation = turf.destination(origin, distance, azimuthToBearing(azimuth), {units: 'meters'});
@@ -20,7 +21,6 @@ const initTarget = (coords: Array<number>) => {
   
   // QA - check distance between origin and target coords
   const targetDistance = turf.distance(origin, turf.point(targetCoords), {units: 'meters'});
-  // console.log(targetDistance)
   
   // return the calculated data on the target. 
   const output = {...DEFAULT_STATE, distance: Math.round(distance), azimuth: azimuth, coords: targetCoords}

@@ -1,22 +1,21 @@
 import React from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
-import { MIN_MORTAR_ELEVATION } from '../lib/gameMechanics';
 
-const Elevation = (props) => {
+const ManualThrust = (props) => {
   const handleChangeText = (text: string) => {
     props.onChangeText(text);
   }
   return (
     <View style={styles.wrap}>
       <View style={{flex: 1}}>
-        <BodyText bold={true}>Elev.</BodyText>
+        <BodyText>Thrust</BodyText>
       </View>
       <View style={{ flex: 1}}>
         <TextInput
           style={styles.input}
           onChangeText={text => handleChangeText(text)}
-          defaultValue={MIN_MORTAR_ELEVATION.toString()}
+          defaultValue={"0"}
           autoCorrect={false}
           keyboardType={"numeric"}
           underlineColorAndroid='transparent'
@@ -42,4 +41,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Elevation;
+export default ManualThrust;
