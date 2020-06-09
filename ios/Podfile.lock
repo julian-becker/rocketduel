@@ -241,8 +241,6 @@ PODS:
     - React
   - react-native-safe-area-context (1.0.2):
     - React
-  - react-native-slider (2.0.9):
-    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -342,7 +340,6 @@ DEPENDENCIES:
   - react-native-compass-heading (from `../node_modules/react-native-compass-heading`)
   - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -443,8 +440,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-mapbox-gl/maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-slider:
-    :path: "../node_modules/@react-native-community/slider"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -541,7 +536,6 @@ SPEC CHECKSUMS:
   react-native-compass-heading: 18742617bdb9e06ce104bd3b90f0dc700b791fd1
   react-native-mapbox-gl: 0a688ca4060ac73e11ed928c2f9a7b70b4665f99
   react-native-safe-area-context: 9d9640a9085014864052e38496fc1dfde0b93974
-  react-native-slider: e51492f1264d882a8815b71c5870f8978e52887d
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
