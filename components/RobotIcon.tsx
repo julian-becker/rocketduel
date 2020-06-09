@@ -1,24 +1,26 @@
 /*
-//  Represents the player's icon in the map view
+//  Represents the target's icon in the map view
 //
 //
 */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { BodyText, Header } from './styled/Text';
+import { TargetContext } from '../contexts/Target';
 import { INITIAL_HEALTH } from '../lib/gameMechanics';
 import { black, green, red } from './styled/Colors';
 
 const silverbot = require('../assets/silverbot.png');
 
-const RobotIcon = (props) => {
+const RobotIcon = () => {
 
+  const { target } = useContext(TargetContext);
+  const { coords, distance, health, isDestroyed } = target;
   return ( 
     <View>
       <Progress.Bar 
-      progress={INITIAL_HEALTH - props.health}
+      progress={INITIAL_HEALTH - health}
       color={red}
       unfilledColor={green.lime}
       borderColor={black}

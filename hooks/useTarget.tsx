@@ -46,4 +46,4 @@ const targetReducer = (state, action) => {
   }
 }
 
-export { initTarget, targetReducer }
+export { DEFAULT_STATE, initTarget, targetReducer }

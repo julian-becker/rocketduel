@@ -6,8 +6,6 @@
 
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { BodyText, Header } from './styled/Text';
-import { black, red, white } from './styled/Colors';
 
 const player = require('../assets/player.png');
 

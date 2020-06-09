@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import * as appData from '../app.json';
 import * as turf from '@turf/turf';
+import { PlayerContext } from '../contexts/Player';
+import { TargetContext } from '../contexts/Target';
 import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
 import RobotIcon from './RobotIcon';
@@ -13,11 +15,17 @@ const deviceWidth = Dimensions.get('screen').width - 10;
 
 MapboxGL.setAccessToken(appData.mapbox.apiKey);
 
-const MapPanel = (props) => {
+const MapPanel = () => {
 
+  // destructure the needed info
+  const { player } = useContext(PlayerContext);
+
+  const { location, elevation} = player;
+  const { target } = useContext(TargetContext);
+  const { coords, distance, health, isDestroyed } = target;
+  
   const cameraRef = useRef(undefined);
-  const { location, elevation  } = props.player;
-  const { coords, distance, azimuth, health, isDestroyed } = props.target;
+
   const [visible, setVisible] = useState(false);
   // scope the map so that all targets are on it, but no broader
   const mapDist = Math.sqrt(2 * (distance * distance)); // the mf'n Pythagorean Theorem y'all
@@ -42,22 +50,6 @@ const MapPanel = (props) => {
     setVisible(!visible);
   };
 
-  /*
-  return (
-    <View>
-      <TouchableOpacity onPress={toggleOverlay}>
-        <Header>🤖 Sighted!</Header>
-        <BodyText accessibilityID='targetCoords'>{`[${coords[0].toFixed(3)}, ${coords[1].toFixed(3)}]`}</BodyText>
-        <BodyText accessibilityID='targetDistance'>{distance} meters</BodyText>
-        <BodyText accessibilityID='targetBearing'>{azimuth} &deg;</BodyText>
-        <BodyText color={isDestroyed ? red : black} accessibilityID='targetHealth'>{isDestroyed ? `Destroyed` : `Health: ${health}`}</BodyText>
-      </TouchableOpacity>
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={styles.mapScreen}>
-        <BodyText>Some Modal Content</BodyText>
-      </Overlay>
-    </View>
-  )
-  */
  return (
   <View style={styles.panelBorder}>
     <View style={styles.panelInterior}>
@@ -82,7 +74,7 @@ const MapPanel = (props) => {
           <PlayerIcon />
         </MapboxGL.MarkerView>
         <MapboxGL.MarkerView id='target' coordinate={coords}>
-          <RobotIcon distance={distance} health={health} isDestroyed={isDestroyed}/>
+          <RobotIcon />
         </MapboxGL.MarkerView>
       </MapboxGL.MapView>
     </View>

@@ -7,6 +7,7 @@ import {
 import GameScreen from './Game';
 import LocationDenied from '../components/LocationDenied';
 import { DEFAULT_STATE as initialPlayerState, playerReducer } from '../hooks/usePlayer';
+import { PlayerContext, PlayerProvider } from '../contexts/Player';
 import useLocation from '../hooks/useLocation';
 import usePermissions from '../hooks/usePermissions';
 
@@ -18,7 +19,11 @@ const GameWrapper = () => {
 
   if (permission.isGranted) {
     // render game screen
-    return player.isLocated ? <GameScreen player={player} dispatchPlayer={dispatchPlayer}/> : <ActivityIndicator size="large" color="#22222" />;
+    return player.isLocated ? 
+      <PlayerProvider player={player} dispatchPlayer={dispatchPlayer}>
+        <GameScreen />
+      </PlayerProvider> 
+      : <ActivityIndicator size="large" color="#22222" />;
   } else if (permission.isChecking) {
     // spinner
     return <ActivityIndicator size="large" color="#22222" />

@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
+import { PlayerContext } from '../contexts/Player';
 import { MIN_MORTAR_ELEVATION } from '../lib/gameMechanics';
 
-const Elevation = (props) => {
+const Elevation = () => {
+
+  const { dispatchPlayer } = useContext(PlayerContext);
+
   const handleChangeText = (text: string) => {
-    props.onChangeText(text);
+    dispatchPlayer({type: 'UPDATE_ELEVATION', value: Number(text)});
   }
+
   return (
     <View style={styles.wrap}>
       <View style={{flex: 1}}>

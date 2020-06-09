@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
+import { ProjectileContext } from '../contexts/Projectile';
 
-const ManualThrust = (props) => {
+const ManualThrust = () => {
+
+  const { dispatchProjectile } = useContext(ProjectileContext);
+
   const handleChangeText = (text: string) => {
-    props.onChangeText(text);
+    dispatchProjectile({type: 'UPDATE_THRUST', value: Number(text)})
   }
   return (
     <View style={styles.wrap}>
