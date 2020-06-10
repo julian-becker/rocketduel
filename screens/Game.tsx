@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from 'react';
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { isEmulatorSync } from 'react-native-device-info';
 import MapPanel from '../components/MapPanel';
 import Azimuth from '../components/Azimuth';
@@ -18,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PlayerContext } from '../contexts/Player';
 import { TargetProvider } from '../contexts/Target';
 import { ProjectileProvider } from '../contexts/Projectile';
-import { DropDownHolder } from '../components/DropDownHolder';
+import { ImpactProvider } from '../contexts/Impact';
 
 
 const GameScreen = () => {
@@ -28,64 +27,47 @@ const GameScreen = () => {
   useCompass(dispatchPlayer);
   useGyroscope(dispatchPlayer);
 
-  useEffect(() => {
-    const onClose = (data) => {
-      data.type === 'success' ? navigation.navigate('YouWin') : null
-    }
-    DropDownHolder.setOnClose(onClose)
-    return function cleanup() {
-      DropDownHolder.setOnClose(() => undefined);
-    }
-  });
   const { location, elevation, azimuth } = player;
   const { coords, altitude } = location;
-
-  const setThrust = async (thrust) => {
-    const options = {
-      enableVibrateFallback: false,
-      ignoreAndroidSystemSettings: false
-    };
-    ReactNativeHapticFeedback.trigger('selection', options);
-    dispatchProjectile({type: 'UPDATE_THRUST', value: thrust});
-  }
 
   return (
     <TargetProvider coords={coords}>
       <ProjectileProvider>
-
-        <Container>
-          <KeyboardAvoidingView behavior={'height'} style={{flex: 1, flexDirection: 'column'}}>
-            {/* map view */}
-            <MapPanel />
-            {/* controls view */}
-            <View style={{flex: 1, flexDirection: 'column'}}>
-            { isEmulatorSync() ?
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 5}}>
-                <View style={styles.stats}>
-                  <Azimuth />
-                  <Elevation />
-                  <ManualThrust />
-                </View>
-              </View>
-              : null }
-              <View style={{flex: 1, flexDirection: 'row' }}>
-                {/* launcher side */}
-                <View style={styles.launcherSide}>
-                  <View style={styles.launcher}>
-                    <BodyText>Launcher goes here</BodyText>
+        <ImpactProvider>
+          <Container>
+            <KeyboardAvoidingView behavior={'height'} style={{flex: 1, flexDirection: 'column'}}>
+              {/* map view */}
+              <MapPanel />
+              {/* controls view */}
+              <View style={{flex: 1, flexDirection: 'column'}}>
+              { isEmulatorSync() ?
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 5}}>
+                  <View style={styles.stats}>
+                    <Azimuth />
+                    <Elevation />
+                    <ManualThrust />
                   </View>
-                  <FireButton />
                 </View>
-                {/* controls view */}
-                { isEmulatorSync() ?
-                  null
-                : 
-                  <ThrustSlider />
-                }
+                : null }
+                <View style={{flex: 1, flexDirection: 'row' }}>
+                  {/* launcher side */}
+                  <View style={styles.launcherSide}>
+                    <View style={styles.launcher}>
+                      <BodyText>Launcher goes here</BodyText>
+                    </View>
+                    <FireButton />
+                  </View>
+                  {/* controls view */}
+                  { isEmulatorSync() ?
+                    null
+                  : 
+                    <ThrustSlider />
+                  }
+                </View>
               </View>
-            </View>
-          </KeyboardAvoidingView>
-        </Container>
+            </KeyboardAvoidingView>
+          </Container>
+        </ImpactProvider>
       </ProjectileProvider>
     </TargetProvider>
   );

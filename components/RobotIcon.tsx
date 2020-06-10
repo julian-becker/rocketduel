@@ -17,10 +17,11 @@ const RobotIcon = () => {
 
   const { target } = useContext(TargetContext);
   const { coords, distance, health, isDestroyed } = target;
+  const remainingHealth = INITIAL_HEALTH - health
   return ( 
     <View>
       <Progress.Bar 
-      progress={INITIAL_HEALTH - health}
+      progress={remainingHealth / 100}
       color={red}
       unfilledColor={green.lime}
       borderColor={black}

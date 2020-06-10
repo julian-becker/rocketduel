@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AlertType, DropDownHolder } from '../components/DropDownHolder';
+import { useNavigation } from '@react-navigation/native';
 import Button from '../components/styled/Button';
 import { BodyText } from './styled/Text';
-import { IMPACT_RADIUS, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
+import { calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 import { blue, red, white } from './styled/Colors';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
 import { ProjectileContext } from '../contexts/Projectile';
+import { ImpactContext } from '../contexts/Impact';
 
 const FireButton = () => {
+  const navigation = useNavigation();
 
   // destructure the needed info
   const { player } = useContext(PlayerContext);
@@ -19,9 +21,11 @@ const FireButton = () => {
   const { target, dispatchTarget } = useContext(TargetContext);
   const { health } = target;
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
+  const { dispatchImpact } = useContext(ImpactContext);
   const { thrust } = projectile;
 
   const onPressFire = () => {
+
     dispatchProjectile({type: 'FIRE'});
     const impact = calculateImpact({
       originCoords: coords,
@@ -31,30 +35,19 @@ const FireButton = () => {
       azimuth: azimuth,
       height: Number(altitude)
     });
-
     const damage = calculateDamage(impact.proximity);
-    const distance = Math.round(impact.distance);
-    const proximity = Math.round(impact.proximity);
-    const time = Math.round(impact.time);
-    dispatchTarget({type: 'UPDATE_HEALTH', value: damage});
-    const isAHit = impact.proximity <= IMPACT_RADIUS;
-    const isAKill = damage >= health;
-    let alertType:AlertType = 'error';
-    if (isAHit) {
-      alertType = 'info';
+    dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
+    dispatchImpact({type: 'ADD_IMPACT', value: impact });
+    if (damage >= health) {
+      setTimeout(() => {
+        navigation.navigate('YouWin');
+      }, 1000)
     }
-    if (isAKill) {
-      alertType = 'success';
-    }
-    const alertTitle = isAHit ? 'Hit!!!' : 'Miss';
-    const alertMessage = `Shot traveled ${distance} meters in ${time} seconds and landed ${proximity} meters from the target. `;
-    const alertMissMessage = alertMessage + `It was a miss.`
-    const alertHitMessage = alertMessage + `It's a hit! You did ${damage} damage. ${isAKill ? 'Target is destroyed!' : ''}`;
-    DropDownHolder.alert(alertType, alertTitle, isAHit ? alertHitMessage : alertMissMessage)
   }
 
   const regenerateTarget = (coords: Array<number>) => {
     dispatchTarget({type: 'REGENERATE_TARGET', value: coords});
+    dispatchImpact({type: 'CLEAR_IMPACTS'});
   }
 
   return ( 
