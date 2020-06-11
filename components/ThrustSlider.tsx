@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
-import VerticalSlider from 'rn-vertical-slider';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { PlayerContext } from '../contexts/Player';
 import { ProjectileContext } from '../contexts/Projectile';
-import { silver } from '../components/styled/Colors';
 
 const ThrustSlider = () => {
 
@@ -22,32 +21,33 @@ const ThrustSlider = () => {
     ReactNativeHapticFeedback.trigger('selection', options);
   }
 
-  const setThrust = (thrust) => {
-    dispatchProjectile({type: 'UPDATE_THRUST', value: thrust});
+  // slider supports 2 values passed as an array
+  const setThrust = async (values) => {
+    console.log(values);
+    const options = {
+      enableVibrateFallback: false,
+      ignoreAndroidSystemSettings: false
+    };
+    ReactNativeHapticFeedback.trigger('selection', options);
+    dispatchProjectile({type: 'UPDATE_THRUST', value: values[0]});
   }
 
   return (
     <View style={styles.thrust}>
-      <BodyText>{`Azimuth: ${azimuth}°`}</BodyText>
-      <BodyText>{`Elevation: ${elevation}°`}</BodyText>
+      <View>
+        <BodyText>{`Azimuth: ${azimuth}°`}</BodyText>
+        <BodyText>{`Elevation: ${elevation}°`}</BodyText>
+      </View>
       <View style={styles.sliderWrap}>
-        <VerticalSlider
-          width={16}
-          height={200}
-          showBackgroundShadow={true}
+        <MultiSlider
+          vertical
+          enabledTwo={false}
+          sliderLength={200}
           min={0}
           max={100}
           step={1}
-          value={thrust}
-          borderRadius={1}
-          minimumTrackTintColor={silver.metallic}
-          maximumTrackTintColor={silver.darkGunmetal}
-          onChange={(value: number) => {
-            handleThrustChange()
-          }}
-          onComplete={(value: number) => {
-            setThrust(value);
-          }}
+          values={[thrust]}
+          onValuesChange={setThrust}
         />
       </View>
       <BodyText>Thrust: {thrust}</BodyText>
