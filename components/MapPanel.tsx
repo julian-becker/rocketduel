@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, ActivityIndicator } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import * as appData from '../app.json';
 import * as turf from '@turf/turf';
@@ -10,7 +10,7 @@ import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
 import RobotIcon from './RobotIcon';
 import CraterIcon from './CraterIcon';
-import { azimuthToBearing } from '../lib/gameMechanics';
+import { MIN_GPS_ACCURACY, azimuthToBearing } from '../lib/gameMechanics';
 
 // panel sizing
 const deviceWidth = Dimensions.get('screen').width - 10;
@@ -22,7 +22,12 @@ const MapPanel = () => {
   // destructure the needed info
   const { player } = useContext(PlayerContext);
 
-  const { location, elevation} = player;
+  const { location, elevation } = player;
+
+  const isLocated = (accuracy: number) => {
+    return accuracy < MIN_GPS_ACCURACY;
+  }
+
   const { target } = useContext(TargetContext);
   const { coords, distance, health, isDestroyed } = target;
   
@@ -57,37 +62,39 @@ const MapPanel = () => {
  return (
   <View style={styles.panelBorder}>
     <View style={styles.panelInterior}>
-      <MapboxGL.MapView
-      style={styles.map}
-      styleURL={'mapbox://styles/mekablitz/ckb5jru9k1oi51ila2hu6dwbw'}
-      compassEnabled={false}
-      logoEnabled={false}
-      >
-        <MapboxGL.Camera
-          bounds={bounds}
-          animationDuration={2000}
-          animationMode='easeTo'
-          followUserLocation={true}
-          followUserMode='compass'
-          followPitch={90-elevation}
-          minZoomLevel={10.5}
-          maxZoomLevel={19}
-          centerCoordinate={location.coords}
-        />
-        <MapboxGL.MarkerView id='player' anchor={{x: 1, y: 0.5}} coordinate={location.coords}>
-          <PlayerIcon />
-        </MapboxGL.MarkerView>
-        <MapboxGL.MarkerView id='target' coordinate={coords}>
-          <RobotIcon />
-        </MapboxGL.MarkerView>
-        {impacts.map((impact, i) => {
-          return (<MapboxGL.MarkerView id={`impact${i}`} coordinate={impact.impactCoords}>
-            <CraterIcon />
-          </MapboxGL.MarkerView>)
-        })}
+      {isLocated(location.accuracy) ? 
+        <MapboxGL.MapView
+        style={styles.map}
+        styleURL={'mapbox://styles/mekablitz/ckb5jru9k1oi51ila2hu6dwbw'}
+        compassEnabled={false}
+        logoEnabled={false}
+        >
+          <MapboxGL.Camera
+            bounds={bounds}
+            animationDuration={2000}
+            animationMode='easeTo'
+            followUserLocation={true}
+            followUserMode='compass'
+            followPitch={90-elevation}
+            minZoomLevel={10.5}
+            maxZoomLevel={19}
+            centerCoordinate={location.coords}
+          />
+          <MapboxGL.MarkerView id='player' anchor={{x: 1, y: 0.5}} coordinate={location.coords}>
+            <PlayerIcon />
+          </MapboxGL.MarkerView>
+          <MapboxGL.MarkerView id='target' coordinate={coords}>
+            <RobotIcon />
+          </MapboxGL.MarkerView>
+          {impacts.map((impact, i) => {
+            return (<MapboxGL.MarkerView id={`impact${i}`} coordinate={impact.impactCoords}>
+              <CraterIcon />
+            </MapboxGL.MarkerView>)
+          })}
 
 
-      </MapboxGL.MapView>
+        </MapboxGL.MapView>
+      : <ActivityIndicator size='large' />}
     </View>
   </View>
 );

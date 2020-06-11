@@ -15,6 +15,10 @@ const MAX_DISTANCE = 5935;
 const MIN_MORTAR_ELEVATION = 45; // don't allow the mortar to fire if held lower than this
 const MAX_MORTAR_ELEVATION = 85.2; // don't let the player shoot themselves
 
+// Reported in meters (https://docs.expo.io/versions/latest/sdk/location/#location
+// if GPS accuracy is above this, the game isn't playable
+const MIN_GPS_ACCURACY = 35; 
+
 // thrust is represented in the game as a slider between 1 and 100 but we need
 // real values in meters/second to match the physics. These are the thrust values needed
 // to only go min distance if elevation is MAX_MORTAR_ELEVATION, and go max distance if
@@ -110,4 +114,4 @@ const calculateDamage = (proximity: number) => {
   return Math.floor(Math.exp((IMPACT_RADIUS - proximity) / DAMAGE_SCALE_FACTOR));
 }
 
-export { BLAST_RADIUS, IMPACT_RADIUS, INITIAL_HEALTH, MAX_DISTANCE, MIN_DISTANCE, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, MAX_THRUST, MIN_THRUST, azimuthToBearing, calculateDamage, calculateImpact, convertThrust, getImpactCoords, getImpactProximity, getRandomInt, getShotDistance, getShotDuration, getTrajectory }
+export { BLAST_RADIUS, IMPACT_RADIUS, INITIAL_HEALTH, MAX_DISTANCE, MIN_DISTANCE, MIN_GPS_ACCURACY, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, MAX_THRUST, MIN_THRUST, azimuthToBearing, calculateDamage, calculateImpact, convertThrust, getImpactCoords, getImpactProximity, getRandomInt, getShotDistance, getShotDuration, getTrajectory }
