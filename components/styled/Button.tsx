@@ -10,22 +10,25 @@ const Button = ({
   textColor,
   backgroundColor,
   onClick,
-  accessibilityId
+  accessibilityId,
+  disabled
 }) => {
   return (
     <ButtonWrap
       onPress={() => onClick(clickData)}
       accessibilityId={accessibilityId}
       backgroundColor={backgroundColor}
+      disabled={disabled ? disabled : false}
     >
       <ButtonText bold={bold} color={textColor}>{text}</ButtonText>
     </ButtonWrap>
   )
 }
 
-const ButtonWrap = styled.TouchableOpacity`
+const ButtonWrap = styled.TouchableHighlight`
 width: 100%;
 background-color: ${props => props.backgroundColor};
+opacity: ${props => (props.disabled === true ? 0.5 : 1)};
 height: 60px;
 border-radius: 8px;
 flex-direction: row;

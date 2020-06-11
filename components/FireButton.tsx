@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../components/styled/Button';
 import { BodyText } from './styled/Text';
-import { calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
+import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 import { blue, red, white } from './styled/Colors';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
@@ -24,6 +24,10 @@ const FireButton = () => {
   const { dispatchImpact } = useContext(ImpactContext);
   const { thrust } = projectile;
 
+  const safeElevation = (elevation: number) => {
+    return (MIN_MORTAR_ELEVATION <= elevation && elevation <= MAX_MORTAR_ELEVATION);
+  }
+
   const onPressFire = () => {
 
     dispatchProjectile({type: 'FIRE'});
@@ -35,6 +39,7 @@ const FireButton = () => {
       azimuth: azimuth,
       height: Number(altitude)
     });
+    console.log(impact.proximity)
     const damage = calculateDamage(impact.proximity);
     dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
     dispatchImpact({type: 'ADD_IMPACT', value: impact });
@@ -52,7 +57,14 @@ const FireButton = () => {
 
   return ( 
     <View style={styles.buttons}>
-      <Button bold text='Fire' textColor={white} backgroundColor={red} onClick={() => onPressFire()}/>
+      <Button 
+        bold
+        text='Fire'
+        textColor={white}
+        backgroundColor={red}
+        disabled={!safeElevation(elevation)}
+        onClick={() => onPressFire()}/>
+      {!safeElevation(elevation) ? <BodyText align='center' color={red}>Elevation unsafe!</BodyText> : null}
       <TouchableOpacity onPress={() => regenerateTarget(coords)} >
         <BodyText align='center' color={blue}>New Target</BodyText>
       </TouchableOpacity>
