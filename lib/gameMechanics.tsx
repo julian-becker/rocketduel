@@ -1,5 +1,5 @@
 import * as turf from '@turf/turf';
-import calculateTrajectory from 'projectile-trajectory';
+import { azimuthToBearing, calculateTrajectory } from 'projectile-trajectory';
 // constants
 const GRAVITY = 9.80665; // m/s^2
 // TODO: calculate this from atmospheric data
@@ -55,10 +55,7 @@ const toKm = (meters: number) => {
 const trigToDegrees = (func: Function, angle: number) => {
   return func(angle * Math.PI / 180);
 }
-// not part of turfjs for some reason
-const azimuthToBearing = (azimuth: number) => {
-  return azimuth < 0 ? 360 + azimuth : azimuth;
-}
+
 // convert thrust in percentage to meters used in the constants
 const convertThrust = (thrust: number) => {
   return ( ((MAX_THRUST - MIN_THRUST) / 100) * thrust + MIN_THRUST);
@@ -103,7 +100,7 @@ const calculateImpact = (parameters: Object) => {
   const { azimuth, originCoords, targetCoords, elevation, height, velocity } = parameters;
   // new library!  🎉
   const shotParams = {
-    initialCoords: originCoords,
+    initialCoords: [originCoords[1], originCoords[0]],
     thrust: velocity,
     azimuth: azimuth,
     elevation: elevation
@@ -114,8 +111,10 @@ const calculateImpact = (parameters: Object) => {
   };
   
   const { finalCoords, distance, duration } = calculateTrajectory(shotParams, projectileParams, environmentParams);
-  const proximity = getImpactProximity(finalCoords, targetCoords);
-  return { distance: distance, impactCoords: finalCoords, proximity: proximity, time: duration };
+  // swap impact coords back out due to turf lat/long reversal
+  const impactCoords = [finalCoords[1], finalCoords[0]];
+  const proximity = getImpactProximity(impactCoords, targetCoords);
+  return { distance: distance, impactCoords: impactCoords, proximity: proximity, time: duration };
 }
 
 const calculateDamage = (proximity: number) => {

@@ -1880,7 +1880,7 @@
     "@turf/helpers" "^5.1.5"
     "@turf/invariant" "^5.1.5"
 
-"@turf/destination@6.x":
+"@turf/destination@6.x", "@turf/destination@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@turf/destination/-/destination-6.0.1.tgz#5275887fa96ec463f44864a2c17f0b712361794a"
   integrity sha512-MroK4nRdp7as174miCAugp8Uvorhe6rZ7MJiC9Hb4+hZR7gNFJyVKmkdDDXIoCYs6MJQsx0buI+gsCpKwgww0Q==
@@ -7219,9 +7219,10 @@ process-nextick-args@~2.0.0:
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
 "projectile-trajectory@https://github.com/jwrubel/projectile-motion-typescript.git":
-  version "1.0.0"
-  resolved "https://github.com/jwrubel/projectile-motion-typescript.git#afd1dc23dcd83f0f1eb5e17d8c35788121dab583"
+  version "1.1.0"
+  resolved "https://github.com/jwrubel/projectile-motion-typescript.git#43caf8ffe7ee15de4f3e2a810f43c5083b462d7f"
   dependencies:
+    "@turf/destination" "^6.0.1"
     "@turf/helpers" "^6.1.4"
     "@types/node" "^14.0.6"
     integrate-adaptive-simpson "^1.1.1"

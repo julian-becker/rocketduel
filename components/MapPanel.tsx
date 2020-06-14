@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, View, ActivityIndicator } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import * as appData from '../app.json';
 import * as turf from '@turf/turf';
+import { azimuthToBearing } from 'projectile-trajectory';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
 import { ImpactContext } from '../contexts/Impact';
@@ -10,7 +11,7 @@ import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
 import RobotIcon from './RobotIcon';
 import CraterIcon from './CraterIcon';
-import { MIN_GPS_ACCURACY, azimuthToBearing } from '../lib/gameMechanics';
+import { MIN_GPS_ACCURACY } from '../lib/gameMechanics';
 
 // panel sizing
 const deviceWidth = Dimensions.get('screen').width - 10;
@@ -32,7 +33,7 @@ const MapPanel = () => {
   const { coords, distance, health, isDestroyed } = target;
   
   const { impacts } = useContext(ImpactContext);
-
+  
   const cameraRef = useRef(undefined);
 
   const [visible, setVisible] = useState(false);
@@ -76,7 +77,7 @@ const MapPanel = () => {
             followUserLocation={true}
             followUserMode='compass'
             followPitch={90-elevation}
-            minZoomLevel={10.5}
+            minZoomLevel={12}
             maxZoomLevel={19}
             centerCoordinate={location.coords}
           />
@@ -86,8 +87,8 @@ const MapPanel = () => {
           <MapboxGL.MarkerView id='target' coordinate={coords}>
             <RobotIcon />
           </MapboxGL.MarkerView>
-          {impacts.map((impact, i) => {
-            return (<MapboxGL.MarkerView id={`impact${i}`} coordinate={impact.impactCoords}>
+          {impacts.map((impact: object, i: number) => {
+            return (<MapboxGL.MarkerView key={`impact${i}`} id={`impact${i}`} coordinate={impact.impactCoords}>
               <CraterIcon />
             </MapboxGL.MarkerView>)
           })}

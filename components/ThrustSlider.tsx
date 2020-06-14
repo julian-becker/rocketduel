@@ -23,7 +23,6 @@ const ThrustSlider = () => {
 
   // slider supports 2 values passed as an array
   const setThrust = async (values) => {
-    console.log(values);
     const options = {
       enableVibrateFallback: false,
       ignoreAndroidSystemSettings: false

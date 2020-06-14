@@ -39,7 +39,6 @@ const FireButton = () => {
       azimuth: azimuth,
       height: Number(altitude)
     });
-    console.log(impact.proximity)
     const damage = calculateDamage(impact.proximity);
     dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
     dispatchImpact({type: 'ADD_IMPACT', value: impact });
