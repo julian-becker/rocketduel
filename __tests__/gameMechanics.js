@@ -68,10 +68,10 @@ test('records a hit', () => {
     velocity: convertThrust(70),
     height: 0,
     originCoords: [40.21034, -80.604],
-    targetCoords: [40.3221, -80.6263],
+    targetCoords: [40.2259, -80.6031],
   }
-  const { proximity } = calculateImpact(params);
-  expect(+proximity.toFixed(5)).toBeLessThanOrEqual(BLAST_RADIUS);
+  const impact = calculateImpact(params);
+  expect(+impact.proximity.toFixed(5)).toBeLessThanOrEqual(BLAST_RADIUS);
 });
 
 test('records a miss', () => {

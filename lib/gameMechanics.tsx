@@ -1,5 +1,5 @@
 import * as turf from '@turf/turf';
-
+import calculateTrajectory from 'projectile-trajectory';
 // constants
 const GRAVITY = 9.80665; // m/s^2
 // TODO: calculate this from atmospheric data
@@ -26,17 +26,16 @@ const MIN_GPS_ACCURACY = 35;
 const MIN_THRUST = 73.15158;
 const MAX_THRUST = 241.25;
 
-// data on projectiles; uses mortar round as baseline
+// data on projectiles; arbitrary, to balance gameplay
 const BLAST_RADIUS = 35; // meters
 const IMPACT_RADIUS = 150; // beyond this, targets should take no damage
 const DAMAGE_SCALE_FACTOR = 24.95; // designed to set BLAST_RADIUS as kill
-const P_WEIGHT = 4.5; // kg
-const P_DIAMETER = 81; // mm
-const P_SURFACE_AREA = (Math.PI * (P_DIAMETER / 2) ** 2) * 1000 // m^2
-// somewhat arbitrary; mortar drag is affected by angle of fire 
-// see https://www.sciencedirect.com/science/article/pii/S2214914719300741
-const P_DRAG_COEFFICIENT = 0.2;
-const P_MASS = P_WEIGHT / GRAVITY; // newtons
+
+const microMissile = {
+  radius: 0.02, // in meters
+  mass: 0.77, // in kg
+  dragCoefficient: 0.295
+}
 
 // settings for enemies
 const INITIAL_HEALTH = 100;
@@ -98,16 +97,25 @@ const getTrajectory = (parameters: Object) => {
   const distance = getShotDistance(velocity, elevation);
   const time = getShotDuration(velocity, elevation);
   return ({distance: distance, time: time})
-
 }
 
 const calculateImpact = (parameters: Object) => {
   const { azimuth, originCoords, targetCoords, elevation, height, velocity } = parameters;
-  const { distance, time } = getTrajectory({velocity: velocity, elevation: elevation, height: height});
-
-  const impactCoords: Array<number> = getImpactCoords({originCoords: originCoords, distance: distance, azimuth: azimuth});
-  const proximity = getImpactProximity(impactCoords, targetCoords);
-  return { distance: distance, impactCoords: impactCoords, proximity: proximity, time: time };
+  // new library!  🎉
+  const shotParams = {
+    initialCoords: originCoords,
+    thrust: velocity,
+    azimuth: azimuth,
+    elevation: elevation
+  };
+  const projectileParams = microMissile;
+  const environmentParams = {
+    // TODO: integrate weather API
+  };
+  
+  const { finalCoords, distance, duration } = calculateTrajectory(shotParams, projectileParams, environmentParams);
+  const proximity = getImpactProximity(finalCoords, targetCoords);
+  return { distance: distance, impactCoords: finalCoords, proximity: proximity, time: duration };
 }
 
 const calculateDamage = (proximity: number) => {
