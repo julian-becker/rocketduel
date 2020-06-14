@@ -6,14 +6,8 @@ const GRAVITY = 9.80665; // m/s^2
 // https://www.omnicalculator.com/physics/air-density#air-density-definition-what-is-the-density-of-air-formula
 const AIR_DENSITY = 1.225; // kg/m^3 TODO: This can be obtained from APIs
 
-// game ranges
-// don't place targets outside this distance from the player
-// these should also be the maximum and minimum firing distances
-const MIN_DISTANCE = 91;
-const MAX_DISTANCE = 5935;
-
-const MIN_MORTAR_ELEVATION = 45; // don't allow the mortar to fire if held lower than this
-const MAX_MORTAR_ELEVATION = 85.2; // don't let the player shoot themselves
+const MIN_MORTAR_ELEVATION = 20; // don't allow the mortar to fire if held lower than this
+const MAX_MORTAR_ELEVATION = 80; // don't let the player shoot themselves
 
 // Reported in meters (https://docs.expo.io/versions/latest/sdk/location/#location
 // if GPS accuracy is above this, the game isn't playable
@@ -23,16 +17,22 @@ const MIN_GPS_ACCURACY = 35;
 // real values in meters/second to match the physics. These are the thrust values needed
 // to only go min distance if elevation is MAX_MORTAR_ELEVATION, and go max distance if
 // elevation is MIN_MORTAR_ELEVATION
-const MIN_THRUST = 73.15158;
-const MAX_THRUST = 241.25;
+const MIN_THRUST = 70; // 73.15158;
+const MAX_THRUST = 120; // 241.25;
 
 // data on projectiles; arbitrary, to balance gameplay
 const BLAST_RADIUS = 35; // meters
 const IMPACT_RADIUS = 150; // beyond this, targets should take no damage
 const DAMAGE_SCALE_FACTOR = 24.95; // designed to set BLAST_RADIUS as kill
 
+// game ranges
+// don't place targets outside this distance from the player
+// these should also be the maximum and minimum firing distances
+const MAX_DISTANCE = 1000;
+const MIN_DISTANCE = IMPACT_RADIUS * 2;
+
 const microMissile = {
-  radius: 0.02, // in meters
+  radius: 0.02, // 0.03, // in meters
   mass: 0.77, // in kg
   dragCoefficient: 0.295
 }
