@@ -21,9 +21,9 @@ const MIN_THRUST = 70; // 73.15158;
 const MAX_THRUST = 120; // 241.25;
 
 // data on projectiles; arbitrary, to balance gameplay
-const BLAST_RADIUS = 35; // meters
-const IMPACT_RADIUS = 150; // beyond this, targets should take no damage
-const DAMAGE_SCALE_FACTOR = 24.95; // designed to set BLAST_RADIUS as kill
+const BLAST_RADIUS = 30; // meters
+const IMPACT_RADIUS = 100; // beyond this, targets should take no damage
+const DAMAGE_SCALE_FACTOR = 15.2; // 24.95; // designed to set BLAST_RADIUS as kill
 
 // game ranges
 // don't place targets outside this distance from the player

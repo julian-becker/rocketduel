@@ -2,6 +2,7 @@ import 'react-native';
 import * as turf from '@turf/turf';
 import {
   BLAST_RADIUS,
+  IMPACT_RADIUS,
   MAX_DISTANCE,
   MIN_DISTANCE,
   MAX_MORTAR_ELEVATION,
@@ -63,10 +64,11 @@ test('records a hit', () => {
     velocity: convertThrust(70),
     height: 0,
     originCoords: [40.21034, -80.604],
-    targetCoords: [40.2181, -80.6036],
+    targetCoords: [40.236727, -80.60925],
   }
-  const { proximity } = calculateImpact(params);
-  expect(+proximity.toFixed(5)).toBeLessThanOrEqual(BLAST_RADIUS);
+  const impact = calculateImpact(params);
+  console.log(impact)
+  expect(+impact.proximity.toFixed(5)).toBeLessThanOrEqual(BLAST_RADIUS);
 });
 
 test('records a miss', () => {
@@ -135,8 +137,13 @@ test('records minimum flight distance', () => {
 });
 
 test('calculates damage', () => {
-  expect(calculateDamage(8)).toBe(296);
-  expect(calculateDamage(35)).toBe(100);
-  expect(calculateDamage(103)).toBe(6);
-  expect(calculateDamage(153)).toBe(0);
+  console.log(`Damage at 5m: ${calculateDamage(5)}`);
+  console.log(`Damage at kill radius: ${calculateDamage(BLAST_RADIUS)}`);
+  console.log(`Damage at halfway between kill & impact: ${calculateDamage((BLAST_RADIUS + IMPACT_RADIUS) / 2)}`);
+  console.log(`Damage at impact radius: ${calculateDamage(IMPACT_RADIUS)}`);
+  console.log(`Damage at impact radius + 1m: ${calculateDamage(IMPACT_RADIUS + 1)}`);
+  expect(calculateDamage(8)).toBe(425);
+  expect(calculateDamage(BLAST_RADIUS)).toBe(100);
+  expect(calculateDamage((BLAST_RADIUS + IMPACT_RADIUS) / 2)).toBe(10);
+  expect(calculateDamage(IMPACT_RADIUS + 1)).toBe(0);
 })
