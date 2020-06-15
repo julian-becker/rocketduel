@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@lightbase/react-native-panorama-view": "https://github.com/lightbasenl/react-native-panorama-view.git#next",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-mapbox-gl/maps": "^8.1.0-beta.1",

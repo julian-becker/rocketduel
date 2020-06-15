@@ -1328,6 +1328,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@lightbase/react-native-panorama-view@https://github.com/lightbasenl/react-native-panorama-view.git#next":
+  version "0.2.0"
+  resolved "https://github.com/lightbasenl/react-native-panorama-view.git#5888f399069872923cffbb4316f56241f117c5b5"
+
 "@mapbox/geo-viewport@>= 0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@mapbox/geo-viewport/-/geo-viewport-0.4.0.tgz#0a8dc5812d3be12c778d6545b2f3f4dec9c633da"

@@ -57,9 +57,16 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - Lightbase-CTPanoramaView (1.5)
   - Mapbox-iOS-SDK (5.9.0):
     - MapboxMobileEvents (= 0.10.2)
   - MapboxMobileEvents (0.10.2)
+  - PanoramaView (0.2.0):
+    - PanoramaView/Core (= 0.2.0)
+    - React
+  - PanoramaView/Core (0.2.0):
+    - Lightbase-CTPanoramaView (= 1.5)
+    - React
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -326,6 +333,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - "PanoramaView (from `../node_modules/@lightbase/react-native-panorama-view`)"
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -376,6 +384,7 @@ SPEC REPOS:
   trunk:
     - "@react-native-mapbox-gl-mapbox-static"
     - boost-for-react-native
+    - Lightbase-CTPanoramaView
     - Mapbox-iOS-SDK
     - MapboxMobileEvents
 
@@ -416,6 +425,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  PanoramaView:
+    :path: "../node_modules/@lightbase/react-native-panorama-view"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -522,8 +533,10 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  Lightbase-CTPanoramaView: 8a542b2a9548e764823db0a6a167d9c96eb4f2ea
   Mapbox-iOS-SDK: a5915700ec84bc1a7f8b3e746d474789e35b7956
   MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
+  PanoramaView: e9cfa001c9cbb27452c5cb74bf39cd35e7d6182e
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
