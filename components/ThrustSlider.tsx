@@ -1,15 +1,11 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BodyText } from './styled/Text';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { PlayerContext } from '../contexts/Player';
 import { ProjectileContext } from '../contexts/Projectile';
 
 const ThrustSlider = () => {
 
-  const { player } = useContext(PlayerContext);
-  const { azimuth, elevation } = player;
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
   const { thrust } = projectile;
 
@@ -33,23 +29,19 @@ const ThrustSlider = () => {
 
   return (
     <View style={styles.thrust}>
-      <View>
-        <BodyText>{`Azimuth: ${azimuth}°`}</BodyText>
-        <BodyText>{`Elevation: ${elevation}°`}</BodyText>
-      </View>
       <View style={styles.sliderWrap}>
         <MultiSlider
           vertical
           enabledTwo={false}
-          sliderLength={200}
+          sliderLength={220}
           min={0}
           max={100}
           step={1}
           values={[thrust]}
           onValuesChange={setThrust}
+          containerStyle={styles.sliderControl}
         />
       </View>
-      <BodyText>Thrust: {thrust}</BodyText>
     </View>
   )
 }
@@ -57,19 +49,15 @@ const ThrustSlider = () => {
 const styles = StyleSheet.create({
   thrust: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   sliderWrap: {
-    margin: 5
+    paddingBottom: 10
   },
-  thrustSlider: {
-    width: '100%',
-    overflow: 'hidden',
+  sliderControl: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#333333',
-    transform: [ { rotate: "-90deg" } ],
+    alignSelf: 'center'
   }
 });
 export default ThrustSlider;

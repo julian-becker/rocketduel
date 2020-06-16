@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ButtonText } from './Text';
-import { black, red } from './Colors'
+import { black } from './Colors'
 
 const Button = ({
   clickData,
@@ -30,6 +30,7 @@ width: 100%;
 background-color: ${props => props.backgroundColor};
 opacity: ${props => (props.disabled === true ? 0.5 : 1)};
 height: 60px;
+margin: 10px;
 border-radius: 8px;
 flex-direction: row;
 justify-content: center;

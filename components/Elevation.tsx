@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
 import { PlayerContext } from '../contexts/Player';
+import { blue, white } from './styled/Colors';
 import { MIN_MORTAR_ELEVATION } from '../lib/gameMechanics';
 
 const Elevation = () => {
@@ -15,7 +16,7 @@ const Elevation = () => {
   return (
     <View style={styles.wrap}>
       <View style={{flex: 1}}>
-        <BodyText bold={true}>Elev.</BodyText>
+        <BodyText color={white}>Elev.</BodyText>
       </View>
       <View style={{ flex: 1}}>
         <TextInput
@@ -42,8 +43,9 @@ const styles = StyleSheet.create({
   input: {
     width: 40,
     padding: 2,
-    borderColor: 'gray',
-    borderWidth: 1
+    backgroundColor: white,
+    borderColor: blue,
+    borderWidth: 2
   }
 });
 

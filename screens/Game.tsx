@@ -1,6 +1,9 @@
 import React, { useEffect, useContext } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { Dimensions, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { isEmulatorSync } from 'react-native-device-info';
+import { PanoramaView } from '@lightbase/react-native-panorama-view';
+import TopHalf from '../components/TopHalf';
+import BottomHalf from '../components/BottomHalf';
 import MapPanel from '../components/MapPanel';
 import Azimuth from '../components/Azimuth';
 import Elevation from '../components/Elevation';
@@ -34,39 +37,15 @@ const GameScreen = () => {
     <TargetProvider coords={coords}>
       <ProjectileProvider>
         <ImpactProvider>
-          <Container>
-            <KeyboardAvoidingView behavior={'height'} style={{flex: 1, flexDirection: 'column'}}>
-              {/* map view */}
-              <MapPanel />
-              {/* controls view */}
-              <View style={{flex: 1, flexDirection: 'column'}}>
-              { isEmulatorSync() ?
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 5}}>
-                  <View style={styles.stats}>
-                    <Azimuth />
-                    <Elevation />
-                    <ManualThrust />
-                  </View>
-                </View>
-                : null }
-                <View style={{flex: 1, flexDirection: 'row' }}>
-                  {/* launcher side */}
-                  <View style={styles.launcherSide}>
-                    <View style={styles.launcher}>
-                      <BodyText>Launcher goes here</BodyText>
-                    </View>
-                    <FireButton />
-                  </View>
-                  {/* controls view */}
-                  { isEmulatorSync() ?
-                    null
-                  : 
-                    <ThrustSlider />
-                  }
-                </View>
-              </View>
-            </KeyboardAvoidingView>
-          </Container>
+          <PanoramaView
+            style={styles.panorama}
+            dimensions={{ height: Dimensions.get("window").height, width: Dimensions.get("window").width }}
+            inputType="mono"
+            enableTouchTracking={false}
+            imageUrl="https://thumbs.dreamstime.com/b/full-degree-seamless-panorama-equirectangular-spherical-equidistant-projection-panorama-view-meadow-beautiful-day-full-138921130.jpg">
+              <TopHalf />
+              <BottomHalf />
+          </PanoramaView>
         </ImpactProvider>
       </ProjectileProvider>
     </TargetProvider>
@@ -75,80 +54,9 @@ const GameScreen = () => {
 
 
 const styles = StyleSheet.create({
-  interior: {
-    flex: 1,
-    flexDirection: 'row',
-    margin: 3
-  },
-  launcherSide: {
+  panorama: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-start'
-  },
-  launcher: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  buttons: {
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  statsSide: {
-    flex: 1,
-    flexDirection: 'column',
-    margin: 3
-  },
-  map: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  stats: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  playerLocation: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10
-  },
-  thrust: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  thrustSlider: {
-    width: '100%',
-    flex: 1,
-    transform: [ { rotate: "-90deg" } ],
-  },
-  input: {
-    height: 30,
-    width: 100,
-    borderColor: 'gray',
-    borderWidth: 1
-  },
-  header: {
-    flex: 1
-  },
-  title: {
-    fontSize: 25
-  },
-  main: {
-    flex: 5
-  },
-  actions: {
-    flex: 1
-  },
-  bold: {
-    fontWeight: "bold"
-  },
-  dataEntry: {
-    fontWeight: "100"
   }
 });
 

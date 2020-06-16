@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Button from '../components/styled/Button';
 import { BodyText } from './styled/Text';
 import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
-import { blue, red, white } from './styled/Colors';
+import { red, white } from './styled/Colors';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
 import { ProjectileContext } from '../contexts/Projectile';
@@ -39,6 +39,7 @@ const FireButton = () => {
       azimuth: azimuth,
       height: Number(altitude)
     });
+    console.log(`proximity: ${impact.proximity}`);
     const damage = calculateDamage(impact.proximity);
     dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
     dispatchImpact({type: 'ADD_IMPACT', value: impact });
@@ -65,7 +66,7 @@ const FireButton = () => {
         onClick={() => onPressFire()}/>
       {!safeElevation(elevation) ? <BodyText align='center' color={red}>Elevation unsafe!</BodyText> : null}
       <TouchableOpacity onPress={() => regenerateTarget(coords)} >
-        <BodyText align='center' color={blue}>New Target</BodyText>
+        <BodyText align='center' color={white}>Regenerate Target</BodyText>
       </TouchableOpacity>
     </View>
   )
@@ -73,8 +74,6 @@ const FireButton = () => {
 
 const styles = StyleSheet.create({
   buttons: {
-    flex: 1,
-    justifyContent: 'space-between',
     alignItems: 'center'
   },
 });

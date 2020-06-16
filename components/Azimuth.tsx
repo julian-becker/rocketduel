@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
 import { PlayerContext } from '../contexts/Player';
+import { blue, white } from './styled/Colors';
 
 const Azimuth = () => {
 
@@ -13,7 +14,7 @@ const Azimuth = () => {
   return (
     <View style={styles.wrap}>
       <View style={{flex: 1}}>
-        <BodyText>Azimuth</BodyText>
+        <BodyText color={white}>Azimuth</BodyText>
       </View>
       <View style={{ flex: 1}}>
         <TextInput
@@ -39,8 +40,9 @@ const styles = StyleSheet.create({
   input: {
     width: 40,
     padding: 2,
-    borderColor: 'gray',
-    borderWidth: 1
+    backgroundColor: white,
+    borderColor: blue,
+    borderWidth: 2
   }
 });
 

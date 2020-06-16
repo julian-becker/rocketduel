@@ -16,6 +16,8 @@ import { MIN_GPS_ACCURACY } from '../lib/gameMechanics';
 // panel sizing
 const deviceWidth = Dimensions.get('screen').width - 10;
 
+const componentSize = deviceWidth * 0.6;
+
 MapboxGL.setAccessToken(appData.mapbox.apiKey);
 
 const MapPanel = () => {
@@ -76,15 +78,14 @@ const MapPanel = () => {
             animationMode='easeTo'
             followUserLocation={true}
             followUserMode='compass'
-            followPitch={90-elevation}
             minZoomLevel={12}
             maxZoomLevel={19}
             centerCoordinate={location.coords}
           />
-          <MapboxGL.MarkerView id='player' anchor={{x: 1, y: 0.5}} coordinate={location.coords}>
+          <MapboxGL.MarkerView id='player' coordinate={location.coords}>
             <PlayerIcon />
           </MapboxGL.MarkerView>
-          <MapboxGL.MarkerView id='target' coordinate={coords}>
+          <MapboxGL.MarkerView id='target' anchor={{x: 0, y: 0}} coordinate={coords}>
             <RobotIcon />
           </MapboxGL.MarkerView>
           {impacts.map((impact: object, i: number) => {
@@ -92,8 +93,6 @@ const MapPanel = () => {
               <CraterIcon />
             </MapboxGL.MarkerView>)
           })}
-
-
         </MapboxGL.MapView>
       : <ActivityIndicator size='large' />}
     </View>
@@ -103,10 +102,10 @@ const MapPanel = () => {
 
 const styles = StyleSheet.create({
   panelBorder: {
-    width: deviceWidth - 30,
-    height: deviceWidth - 30,
-    borderRadius: deviceWidth - 30 / 2,
-    alignSelf: 'center',
+    margin: 5,
+    width: componentSize,
+    height: componentSize,
+    borderRadius: componentSize / 2,
     justifyContent: 'center',
     alignItems: "center",
     backgroundColor: silver.roman,
@@ -114,9 +113,9 @@ const styles = StyleSheet.create({
     borderColor: black
   },
   panelInterior: {
-    width: deviceWidth - 40,
-    height: deviceWidth - 40,
-    borderRadius: deviceWidth - 40 / 2,
+    width: componentSize - 10,
+    height: componentSize - 10,
+    borderRadius: componentSize - 10 / 2,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: "center",
@@ -128,9 +127,9 @@ const styles = StyleSheet.create({
     backgroundColor: white
   },
   map: {
-    width: deviceWidth - 50,
-    height: deviceWidth - 50,
-    borderRadius: deviceWidth - 50 / 2,
+    width: componentSize - 15,
+    height: componentSize - 15,
+    borderRadius: componentSize - 15 / 2,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: black
