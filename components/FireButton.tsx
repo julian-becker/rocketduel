@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Button from '../components/styled/Button';
+import AwesomeButton from 'react-native-really-awesome-button';
 import { BodyText } from './styled/Text';
 import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 import { red, white } from './styled/Colors';
+import RocketIcon from './RocketIcon';
+import HazardIcon from './HazardIcon';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
 import { ProjectileContext } from '../contexts/Projectile';
@@ -57,14 +59,20 @@ const FireButton = () => {
 
   return ( 
     <View style={styles.buttons}>
-      <Button 
-        bold
-        text='Fire'
+      <AwesomeButton 
+        height={70}
+        width={70}
+        borderRadius={35}
+        raiseLevel={5}
+        backgroundDarker={ !safeElevation(elevation) ? red : '#EA3434' }
+        borderColor='#EA3434'
+        borderWidth={1}
         textColor={white}
-        backgroundColor={red}
+        backgroundColor={ !safeElevation(elevation) ? '#F17E7E' : red}
         disabled={!safeElevation(elevation)}
-        onClick={() => onPressFire()}/>
-      {!safeElevation(elevation) ? <BodyText align='center' color={red}>Elevation unsafe!</BodyText> : null}
+        onPress={() => onPressFire()}>
+        { !safeElevation(elevation) ? <HazardIcon /> : <RocketIcon /> }
+      </AwesomeButton>
       <TouchableOpacity onPress={() => regenerateTarget(coords)} >
         <BodyText align='center' color={white}>Regenerate Target</BodyText>
       </TouchableOpacity>
