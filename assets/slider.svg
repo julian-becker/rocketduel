@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="112px" height="47px" viewBox="0 0 112 47" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>slider</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="7.57940854%" x2="50%" y2="89.0032859%" id="linearGradient-1">
+            <stop stop-color="#B8CDF4" offset="0%"></stop>
+            <stop stop-color="#29ABE2" offset="50%"></stop>
+            <stop stop-color="#5386E4" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="49.9953467%" y1="7.59213759%" x2="49.9953467%" y2="89.017199%" id="linearGradient-2">
+            <stop stop-color="#2BC4F3" offset="0%"></stop>
+            <stop stop-color="#53AEEE" offset="50%"></stop>
+            <stop stop-color="#0095DA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="45.7288797%" y1="112.889952%" x2="45.7288797%" y2="13.0175439%" id="linearGradient-3">
+            <stop stop-color="#2BC4F3" offset="0%"></stop>
+            <stop stop-color="#00AEEE" offset="50%"></stop>
+            <stop stop-color="#0095DA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="45.7288797%" y1="113.22807%" x2="45.7288797%" y2="13.3556619%" id="linearGradient-4">
+            <stop stop-color="#2BC4F3" offset="0%"></stop>
+            <stop stop-color="#00AEEE" offset="50%"></stop>
+            <stop stop-color="#0095DA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="45.7288797%" y1="113.467305%" x2="45.7288797%" y2="13.6937799%" id="linearGradient-5">
+            <stop stop-color="#2BC4F3" offset="0%"></stop>
+            <stop stop-color="#00AEEE" offset="50%"></stop>
+            <stop stop-color="#0095DA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="WIREFRAME_ELEMENT_MAY_18_EEZY_05" transform="translate(-292.000000, -960.000000)">
+            <g id="OBJECT" transform="translate(114.000000, 101.000000)">
+                <g id="slider" transform="translate(178.000000, 859.000000)">
+                    <rect id="Rectangle" fill="url(#linearGradient-1)" x="0.25" y="0.77" width="111.74" height="45.65" rx="12.36"></rect>
+                    <rect id="Rectangle" fill="url(#linearGradient-2)" x="2.4" y="3.24" width="107.45" height="40.7" rx="9.89"></rect>
+                    <rect id="Rectangle" fill="url(#linearGradient-3)" x="12.56" y="32.41" width="87.12" height="6.27" rx="3.13"></rect>
+                    <rect id="Rectangle" fill="url(#linearGradient-4)" x="12.56" y="20.46" width="87.12" height="6.27" rx="3.13"></rect>
+                    <rect id="Rectangle" fill="url(#linearGradient-5)" x="12.56" y="8.51" width="87.12" height="6.27" rx="3.13"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

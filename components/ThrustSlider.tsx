@@ -3,6 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { ProjectileContext } from '../contexts/Projectile';
+import { silver } from './styled/Colors';
+import SliderKnob from './SliderKnob';
 
 const ThrustSlider = () => {
 
@@ -39,7 +41,16 @@ const ThrustSlider = () => {
           step={1}
           values={[thrust]}
           onValuesChange={setThrust}
+          selectedStyle={{
+            backgroundColor: silver.metallic,
+          }}
+          unselectedStyle={{
+            backgroundColor: silver.darkGunmetal,
+          }}
+          trackStyle={{height: 8}}
+          markerOffsetY={4}
           containerStyle={styles.sliderControl}
+          customMarker={SliderKnob}
         />
       </View>
     </View>
