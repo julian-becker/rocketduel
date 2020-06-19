@@ -5,6 +5,7 @@ import AwesomeButton from 'react-native-really-awesome-button';
 import { BodyText } from './styled/Text';
 import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 import { red, white } from './styled/Colors';
+import Player from '../lib/Player';
 import RocketIcon from './RocketIcon';
 import HazardIcon from './HazardIcon';
 import { PlayerContext } from '../contexts/Player';
@@ -31,8 +32,9 @@ const FireButton = () => {
   }
 
   const onPressFire = () => {
-
+    Player.playSound('fireButton');
     dispatchProjectile({type: 'FIRE'});
+    Player.playSound('rocketLaunch');
     const impact = calculateImpact({
       originCoords: coords,
       targetCoords: target.coords,
@@ -45,6 +47,7 @@ const FireButton = () => {
     const damage = calculateDamage(impact.proximity);
     dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
     dispatchImpact({type: 'ADD_IMPACT', value: impact });
+    // Player.playSound('blastMiss'); TODO: add in when timing is implemented
     if (damage >= health) {
       setTimeout(() => {
         navigation.navigate('YouWin');
