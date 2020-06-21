@@ -1,6 +1,7 @@
 import 'react-native';
 import {
   calculateOffset,
+  calculatePerceivedHeight,
   calculateXPos
 } from '../lib/helpers';
 
@@ -58,4 +59,19 @@ describe('calculates relative pixel offsets in a large image', () => {
     const targetPos = 3125; // in px
     expect(calculateXPos(LARGE_IMAGE_WIDTH, playerPos, targetPos)).toBe(-1251);
   });
+});
+
+describe('calculates relative target height', () => {
+  test('converts faraway enemies', () => {
+    const realSize = 8; // in meters
+    const distance = 1000; // meters, farthest away
+    expect(calculatePerceivedHeight(realSize, distance)).toBeCloseTo(21.5);
+  });
+
+  test('converts nearby enemies', () => {
+    const realSize = 13; // in meters
+    const distance = 180; // close!
+    expect(calculatePerceivedHeight(realSize, distance)).toBeCloseTo(194.05);
+  });
+
 });

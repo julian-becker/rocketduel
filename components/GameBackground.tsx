@@ -7,7 +7,7 @@ import { TargetContext } from '../contexts/Target';
 import { calculateOffset, calculateXPos } from '../lib/helpers';
 import TopHalf from '../components/TopHalf';
 import BottomHalf from '../components/BottomHalf';
-import RobotIcon from './RobotIcon';
+import Robot from './Robot';
 
 const backgroundImage = Asset.fromModule(require('../assets/backgrounds/seamless-panoramic.jpg'));
 const imageWidth = backgroundImage.width;
@@ -43,8 +43,8 @@ const GameBackground = () => {
       onImageLoaded={onBackgroundLoaded}
       imageUrl={backgroundImage.uri}>
         { /* robots go here */ }
-        <View style={{position: 'absolute', top: robotYPos, right: adjustedXPos }}>
-          <RobotIcon />
+        <View style={{position: 'absolute', top: 320, right: adjustedXPos }}>
+          <Robot useScale={true}/>
         </View>
         <TopHalf />
         <BottomHalf />

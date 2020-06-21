@@ -1,44 +1,12 @@
-/*
-//  Represents the target's icon in the map view
-//
-//
-*/
+import React from 'react';
+import Robot from '../assets/robots/redbot.svg';
+const RobotIcon = (props) => {
 
-import React, { useContext } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import * as Progress from 'react-native-progress';
-import { TargetContext } from '../contexts/Target';
-import { INITIAL_HEALTH } from '../lib/gameMechanics';
-import { black, green, red } from './styled/Colors';
-
-const silverbot = require('../assets/silverbot.png');
-
-const RobotIcon = () => {
-
-  const { target } = useContext(TargetContext);
-  const { coords, distance, health, isDestroyed } = target;
-  const remainingHealth = INITIAL_HEALTH - health
+  const height = props.height || 24;
+  const RATIO = 2 / 3; // robot design scale, width / height
   return ( 
-    <View>
-      <Progress.Bar 
-      progress={remainingHealth / 100}
-      color={red}
-      unfilledColor={green.lime}
-      borderColor={black}
-      borderRadius={0}
-      width={40}/>
-      <Image style={styles.silverbot} source={silverbot} />
-    </View>
-    
+    <Robot height={height} width={height * RATIO} />
   )
-}
-
-const styles = StyleSheet.create({
-  silverbot: {
-    backgroundColor: 'transparent',
-    height: 50,
-    width: 25
-  }
-});
+};
 
 export default RobotIcon;

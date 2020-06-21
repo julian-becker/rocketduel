@@ -9,7 +9,7 @@ import { TargetContext } from '../contexts/Target';
 import { ImpactContext } from '../contexts/Impact';
 import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
-import RobotIcon from './RobotIcon';
+import Robot from './Robot';
 import CraterIcon from './CraterIcon';
 import { MIN_GPS_ACCURACY } from '../lib/gameMechanics';
 
@@ -86,7 +86,7 @@ const MapPanel = () => {
             <PlayerIcon />
           </MapboxGL.MarkerView>
           <MapboxGL.MarkerView id='target' anchor={{x: 0, y: 0}} coordinate={coords}>
-            <RobotIcon />
+            <Robot />
           </MapboxGL.MarkerView>
           {impacts.map((impact: object, i: number) => {
             return (<MapboxGL.MarkerView key={`impact${i}`} id={`impact${i}`} coordinate={impact.impactCoords}>

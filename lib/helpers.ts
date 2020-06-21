@@ -21,4 +21,13 @@ const calculateXPos = (imageWidth: number, playerPos: number, targetPos: number)
   return offset > (imageWidth / 2) ? offset - imageWidth : offset;
 }
 
-export { calculateOffset, calculateXPos };
+// Given an object of size in meters realSize at a given distance in meters, 
+// How big should it appear in reference pixels?
+const calculatePerceivedHeight = (realSize: number, distance: number) => {
+  const referencePixelAngleRatio = (Math.PI/180) * 0.021315384;
+  const pixelLength = 1/96;
+  const finalperceived = 2 * Math.atan2(realSize / 2, distance) / referencePixelAngleRatio;
+  return finalperceived
+}
+
+export { calculateOffset, calculatePerceivedHeight, calculateXPos };
