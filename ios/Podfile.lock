@@ -17,6 +17,14 @@ PODS:
   - EXFont (8.1.1):
     - UMCore
     - UMFontInterface
+  - EXGL (8.3.1):
+    - EXGL_CPP
+    - UMCameraInterface
+    - UMCore
+    - UMFileSystemInterface
+  - EXGL_CPP (8.3.1):
+    - EXGL_CPP/EXGLContext (= 8.3.1)
+  - EXGL_CPP/EXGLContext (8.3.1)
   - EXImageLoader (1.0.1):
     - React-Core
     - UMCore
@@ -329,6 +337,8 @@ DEPENDENCIES:
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
+  - EXGL (from `../node_modules/expo-gl/ios`)
+  - EXGL_CPP (from `../node_modules/expo-gl-cpp/cpp`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
@@ -412,6 +422,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-file-system/ios"
   EXFont:
     :path: "../node_modules/expo-font/ios"
+  EXGL:
+    :path: "../node_modules/expo-gl/ios"
+  EXGL_CPP:
+    :path: "../node_modules/expo-gl-cpp/cpp"
   EXImageLoader:
     :path: "../node_modules/expo-image-loader/ios"
   EXKeepAwake:
@@ -538,6 +552,8 @@ SPEC CHECKSUMS:
   EXErrorRecovery: 8f4c21ab2f51bf75defe4536f841a37de59b0661
   EXFileSystem: cf4232ba7c62dc49b78c2d36005f97b6fddf0b01
   EXFont: b60f7a8900e3a12e7be3b2a40e19b22c7b5f89ba
+  EXGL: 34fdad312c8fefe8dbc24fa68056868830d8e826
+  EXGL_CPP: ed6b6ec48e1253e038003c49cdd29af3e0e8e82c
   EXImageLoader: 5ad6896fa1ef2ee814b551873cbf7a7baccc694a
   EXKeepAwake: d045bc2cf1ad5a04f0323cc7c894b95b414042e0
   EXLinearGradient: 97d8095d1e4ad96f7893e010e564796ed8aeea42
@@ -600,6 +616,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: cb890c79c63885504ddc0efd7a7d01481760aca2
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 3a66b6ff9a19e5ffaf2565f63f33d9a43b00ccbc
+PODFILE CHECKSUM: 957420698d95c8b5f32bef365e68e099ef257803
 
 COCOAPODS: 1.9.3
