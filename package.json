@@ -23,6 +23,7 @@
     "expo-splash-screen": "^0.2.3",
     "expo-three": "^5.5.1",
     "expo-updates": "~0.2.0",
+    "gsap": "^3.3.4",
     "projectile-trajectory": "https://github.com/jwrubel/projectile-motion-typescript.git",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
