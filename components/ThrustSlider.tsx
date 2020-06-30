@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { ProjectileContext } from '../contexts/Projectile';
+import { PlayerContext } from '../contexts/Player';
 import { silver } from './styled/Colors';
 import SliderKnob from './SliderKnob';
 
 const ThrustSlider = () => {
 
-  const { projectile, dispatchProjectile } = useContext(ProjectileContext);
-  const { thrust } = projectile;
+  const { player, dispatchPlayer } = useContext(PlayerContext);
+  const { thrust } = player;
 
   const handleThrustChange = async () => {
     const options = {
@@ -26,7 +26,7 @@ const ThrustSlider = () => {
       ignoreAndroidSystemSettings: false
     };
     ReactNativeHapticFeedback.trigger('selection', options);
-    dispatchProjectile({type: 'UPDATE_THRUST', value: values[0]});
+    dispatchPlayer({type: 'UPDATE_THRUST', value: values[0]});
   }
 
   return (

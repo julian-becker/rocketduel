@@ -121,4 +121,4 @@ const calculateDamage = (proximity: number) => {
   return Math.floor(Math.exp((IMPACT_RADIUS - proximity) / DAMAGE_SCALE_FACTOR));
 }
 
-export { BLAST_RADIUS, IMPACT_RADIUS, INITIAL_HEALTH, MAX_DISTANCE, MIN_DISTANCE, MIN_GPS_ACCURACY, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, MAX_THRUST, MIN_THRUST, azimuthToBearing, calculateDamage, calculateImpact, convertThrust, getImpactCoords, getImpactProximity, getRandomInt, getShotDistance, getShotDuration, getTrajectory }
+export { BLAST_RADIUS, IMPACT_RADIUS, INITIAL_HEALTH, MAX_DISTANCE, MIN_DISTANCE, MIN_GPS_ACCURACY, MAX_MORTAR_ELEVATION, MIN_MORTAR_ELEVATION, MAX_THRUST, MIN_THRUST, azimuthToBearing, calculateDamage, calculateImpact, convertThrust, getImpactCoords, getImpactProximity, getRandomInt, getShotDistance, getShotDuration, getTrajectory, trigToDegrees }

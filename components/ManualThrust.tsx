@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
-import { ProjectileContext } from '../contexts/Projectile';
+import { PlayerContext } from '../contexts/Player';
 import { blue, white } from './styled/Colors';
 
 const ManualThrust = () => {
 
-  const { dispatchProjectile } = useContext(ProjectileContext);
+  const { dispatchPlayer } = useContext(PlayerContext);
 
   const handleChangeText = (text: string) => {
-    dispatchProjectile({type: 'UPDATE_THRUST', value: Number(text)})
+    dispatchPlayer({type: 'UPDATE_THRUST', value: Number(text)})
   }
+
   return (
     <View style={styles.wrap}>
       <View style={{flex: 1}}>

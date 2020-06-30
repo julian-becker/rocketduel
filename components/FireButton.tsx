@@ -1,31 +1,29 @@
 import React, { useContext } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { BodyText } from './styled/Text';
-import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION, calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
+import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION } from '../lib/gameMechanics';
 import { red, white } from './styled/Colors';
 import Player from '../lib/Player';
 import RocketIcon from './RocketIcon';
 import HazardIcon from './HazardIcon';
+import Projectile from './Projectile';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
 import { ProjectileContext } from '../contexts/Projectile';
 import { ImpactContext } from '../contexts/Impact';
 
 const FireButton = () => {
-  const navigation = useNavigation();
 
   // destructure the needed info
   const { player } = useContext(PlayerContext);
  
-  const { azimuth, elevation, location } = player;
-  const { altitude, coords } = location
-  const { target, dispatchTarget } = useContext(TargetContext);
-  const { health } = target;
+  const { location, elevation, thrust, azimuth } = player;
+  const { coords } = location;
+  const { dispatchTarget } = useContext(TargetContext);
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
+  const { isInFlight } = projectile;
   const { dispatchImpact } = useContext(ImpactContext);
-  const { thrust } = projectile;
 
   const safeElevation = (elevation: number) => {
     return (MIN_MORTAR_ELEVATION <= elevation && elevation <= MAX_MORTAR_ELEVATION);
@@ -33,26 +31,8 @@ const FireButton = () => {
 
   const onPressFire = () => {
     Player.playSound('fireButton');
-    dispatchProjectile({type: 'FIRE'});
+    dispatchProjectile({type: 'FIRE', value: { elevation: elevation, thrust: thrust, azimuth: azimuth}});
     Player.playSound('rocketLaunch');
-    const impact = calculateImpact({
-      originCoords: coords,
-      targetCoords: target.coords,
-      velocity: convertThrust(Number(thrust)),
-      elevation: Number(elevation),
-      azimuth: azimuth,
-      height: Number(altitude)
-    });
-    console.log(`proximity: ${impact.proximity}`);
-    const damage = calculateDamage(impact.proximity);
-    dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
-    dispatchImpact({type: 'ADD_IMPACT', value: impact });
-    // Player.playSound('blastMiss'); TODO: add in when timing is implemented
-    if (damage >= health) {
-      setTimeout(() => {
-        navigation.navigate('YouWin');
-      }, 1000)
-    }
   }
 
   const regenerateTarget = (coords: Array<number>) => {
@@ -72,13 +52,14 @@ const FireButton = () => {
         borderWidth={1}
         textColor={white}
         backgroundColor={ !safeElevation(elevation) ? '#F17E7E' : red}
-        disabled={!safeElevation(elevation)}
+        disabled={!safeElevation(elevation) && !isInFlight}
         onPress={() => onPressFire()}>
-        { !safeElevation(elevation) ? <HazardIcon /> : <RocketIcon /> }
+        { !safeElevation(player.elevation) ? <HazardIcon /> : <RocketIcon /> }
       </AwesomeButton>
       <TouchableOpacity onPress={() => regenerateTarget(coords)} >
         <BodyText align='center' color={white}>Regenerate Target</BodyText>
       </TouchableOpacity>
+      { projectile.isInFlight ? <Projectile /> : null }
     </View>
   )
 }

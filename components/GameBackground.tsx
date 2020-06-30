@@ -1,6 +1,7 @@
 import React, { useContext, useState }  from 'react';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { PanoramaView } from '@lightbase/react-native-panorama-view';
+import { isEmulatorSync } from 'react-native-device-info';
 import { Asset } from 'expo-asset';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
@@ -8,6 +9,7 @@ import { calculateOffset, calculateXPos } from '../lib/helpers';
 import TopHalf from '../components/TopHalf';
 import BottomHalf from '../components/BottomHalf';
 import Robot from './Robot';
+import Launcher from './Launcher';
 
 const backgroundImage = Asset.fromModule(require('../assets/backgrounds/seamless-panoramic.jpg'));
 const imageWidth = backgroundImage.width;
@@ -46,6 +48,8 @@ const GameBackground = () => {
         <View style={{position: 'absolute', top: 320, right: adjustedXPos }}>
           <Robot useScale={true}/>
         </View>
+        { /* rlauncher needs to be full-screen */ }
+        { !isEmulatorSync() ? <Launcher /> : null }
         <TopHalf />
         <BottomHalf />
     </PanoramaView>

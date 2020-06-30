@@ -10,7 +10,8 @@ const DEFAULT_STATE = {
     heading: 0 // Azimuth direction 0-360 deg)
   },
   azimuth: 0, // obtain from compass
-  elevation: MIN_MORTAR_ELEVATION // obtain from gyroscope - 0 (horizontal) to 90 (vertical)
+  elevation: MIN_MORTAR_ELEVATION, // obtain from gyroscope - 0 (horizontal) to 90 (vertical)
+  thrust: 0
 }
 
 const playerReducer = (state, action) => {
@@ -21,6 +22,8 @@ const playerReducer = (state, action) => {
       return { ...state, azimuth: action.value };
     case 'UPDATE_ELEVATION':
       return { ...state, elevation: action.value };
+    case 'UPDATE_THRUST':
+      return { ...state, thrust: action.value };
     default:
       return { ...state };
   }
