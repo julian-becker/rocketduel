@@ -74,11 +74,11 @@ const Launcher = () => {
     // these will be somewhat arbitrary since all we want to do is show the player they
     // launched a rocket
  
-    const speedAdjustment = 0.1; // the max we want it to move in any direction at full thrust
+    const speedAdjustment = 0.03; // the max we want it to move in any direction at full thrust
     const convertedThrust = convertThrust(thrust);
     const v_0_z = convertedThrust * trigToDegrees(Math.cos, elevation) * speedAdjustment;
     const v_0_y = convertedThrust * trigToDegrees(Math.sin, elevation) * speedAdjustment;
-    TweenLite.to(rocket.position, 1, {
+    TweenLite.to(rocket.position, 1/60, {
       y: `+= ${v_0_y}`,
       z: `-= ${v_0_z}`
     })
@@ -87,7 +87,9 @@ const Launcher = () => {
   }
 
   // show rocket at the same angle as the device rotation
-  rocket.rotation.x = THREE.MathUtils.degToRad(player.elevation - 90);
+  TweenLite.to(rocket.rotation, 1/60, {
+    x: THREE.MathUtils.degToRad(player.elevation - 90)
+  })
 
   const _onGLContextCreate = async (gl) => {
     const renderer = new Renderer({ gl });

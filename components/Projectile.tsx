@@ -33,11 +33,11 @@ const Projectile = () => {
     });
     console.log(`proximity: ${impact.proximity}`);
     const damage = calculateDamage(impact.proximity);
-    dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
-    dispatchImpact({type: 'ADD_IMPACT', value: impact });
     // Player.playSound('blastMiss'); TODO: add in when timing is implemented
     setTimeout(() => {
       dispatchProjectile({ type: 'LANDED' });
+      dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
+      dispatchImpact({type: 'ADD_IMPACT', value: impact });
       if (damage >= health) {
         navigation.navigate('YouWin');
       }
