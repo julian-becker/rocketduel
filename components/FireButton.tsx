@@ -40,6 +40,10 @@ const FireButton = () => {
     dispatchImpact({type: 'CLEAR_IMPACTS'});
   }
 
+  const safeToFire = () => {
+    return (safeElevation(elevation) && !isInFlight)
+  }
+
   return ( 
     <View style={styles.buttons}>
       <AwesomeButton 
@@ -47,14 +51,14 @@ const FireButton = () => {
         width={70}
         borderRadius={35}
         raiseLevel={5}
-        backgroundDarker={ !safeElevation(elevation) ? red : '#EA3434' }
+        backgroundDarker={ safeToFire() ? '#EA3434' : red }
         borderColor='#EA3434'
         borderWidth={1}
         textColor={white}
-        backgroundColor={ !safeElevation(elevation) ? '#F17E7E' : red}
-        disabled={!safeElevation(elevation) && !isInFlight}
+        backgroundColor={ safeToFire() ? red : '#F17E7E' }
+        disabled={!safeToFire()}
         onPress={() => onPressFire()}>
-        { !safeElevation(player.elevation) ? <HazardIcon /> : <RocketIcon /> }
+        { safeToFire() ? <RocketIcon /> : <HazardIcon /> }
       </AwesomeButton>
       <TouchableOpacity onPress={() => regenerateTarget(coords)} >
         <BodyText align='center' color={white}>Regenerate Target</BodyText>

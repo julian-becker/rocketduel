@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import * as THREE from 'three';
 import { GLView } from 'expo-gl';
 import { Renderer, TextureLoader, loadAsync, utils } from 'expo-three';
+import { TweenLite, gsap } from 'gsap';
 import { convertThrust } from '../lib/gameMechanics';
 import { PlayerContext } from '../contexts/Player';
 import { ProjectileContext } from '../contexts/Projectile';
@@ -14,6 +15,10 @@ window.performance.clearMeasures = ()=>{}
 window.performance.clearMarks = ()=>{}
 window.performance.measure = ()=>{}
 window.performance.mark = ()=>{}
+
+gsap.config({
+  force3D: true
+})
 
 const Launcher = () => {
   let timeout;
@@ -69,12 +74,14 @@ const Launcher = () => {
     // these will be somewhat arbitrary since all we want to do is show the player they
     // launched a rocket
  
-    const speedAdjustment = 0.05; // the max we want it to move in any direction at full thrust
+    const speedAdjustment = 0.1; // the max we want it to move in any direction at full thrust
     const convertedThrust = convertThrust(thrust);
     const v_0_z = convertedThrust * trigToDegrees(Math.cos, elevation) * speedAdjustment;
     const v_0_y = convertedThrust * trigToDegrees(Math.sin, elevation) * speedAdjustment;
-    rocket.position.y += v_0_y;
-    rocket.position.z -= v_0_z;
+    TweenLite.to(rocket.position, 1, {
+      y: `+= ${v_0_y}`,
+      z: `-= ${v_0_z}`
+    })
   } else {
     rocket.position.set(-0.5, -3, 0);
   }
@@ -91,9 +98,6 @@ const Launcher = () => {
     camera.position.set(0, 0, 10);
     camera.lookAt(scene.position);
 
-
-    rocket.rotation.x = - Math.PI / 4; // x is towards/away, y is spin, z is clockwise
-    rocket.position.set(-0.5, -3, 0); // manually adjust for full screen
     scene.add(rocket);
 
     const light = new THREE.AmbientLight(new THREE.Color(0xffffff), 1); //
@@ -102,7 +106,6 @@ const Launcher = () => {
     // Setup an animation loop
     const render = () => {
       timeout = requestAnimationFrame(render);
-      rocket.rotation.y += 0.01;
       renderer.render(scene, camera);
       gl.endFrameEXP();
     };
