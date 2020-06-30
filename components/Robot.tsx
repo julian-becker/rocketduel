@@ -21,7 +21,6 @@ const Robot = (props) => {
 
   const ROBOT_HEIGHT = 8; // meters
   const perceivedHeight = calculatePerceivedHeight(ROBOT_HEIGHT, distance);
-  console.log(props.useScale);
   return ( 
     <View>
       <Progress.Bar 
