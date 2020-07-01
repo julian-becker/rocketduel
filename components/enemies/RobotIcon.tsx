@@ -1,5 +1,5 @@
 import React from 'react';
-import Robot from '../assets/robots/redbot.svg';
+import Robot from '../../assets/robots/redbot.svg';
 const RobotIcon = (props) => {
 
   const height = props.height || 24;

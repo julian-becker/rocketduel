@@ -9,7 +9,7 @@ import { TargetContext } from '../contexts/Target';
 import { ImpactContext } from '../contexts/Impact';
 import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
-import Robot from './Robot';
+import Robot from './enemies/Robot';
 import CraterIcon from './CraterIcon';
 import { MIN_GPS_ACCURACY } from '../lib/gameMechanics';
 

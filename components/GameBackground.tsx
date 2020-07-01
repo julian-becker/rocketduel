@@ -8,7 +8,7 @@ import { TargetContext } from '../contexts/Target';
 import { calculateOffset, calculateXPos } from '../lib/helpers';
 import TopHalf from '../components/TopHalf';
 import BottomHalf from '../components/BottomHalf';
-import Robot from './Robot';
+import Robot from './enemies/Robot';
 import Launcher from './Launcher';
 
 const backgroundImage = Asset.fromModule(require('../assets/backgrounds/seamless-panoramic.jpg'));

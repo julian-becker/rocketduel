@@ -7,11 +7,11 @@
 import React, { useContext } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { TargetContext } from '../contexts/Target';
-import { calculatePerceivedHeight } from '../lib/helpers';
+import { TargetContext } from '../../contexts/Target';
+import { calculatePerceivedHeight } from '../../lib/helpers';
 import RobotIcon from './RobotIcon';
-import { INITIAL_HEALTH } from '../lib/gameMechanics';
-import { black, green, red } from './styled/Colors';
+import { INITIAL_HEALTH } from '../../lib/gameMechanics';
+import { black, green, red } from '../styled/Colors';
 
 const Robot = (props) => {
 
