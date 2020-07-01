@@ -11,11 +11,6 @@ import { trigToDegrees } from '../lib/gameMechanics';
 
 global.THREE = global.THREE || THREE;
 
-window.performance.clearMeasures = ()=>{}
-window.performance.clearMarks = ()=>{}
-window.performance.measure = ()=>{}
-window.performance.mark = ()=>{}
-
 gsap.config({
   force3D: true
 })

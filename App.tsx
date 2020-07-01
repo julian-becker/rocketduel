@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, YellowBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // asset preload
@@ -12,7 +12,16 @@ import Setup from './screens/Setup';
 import GameWrapper from './screens/GameWrapper';
 import YouWin from './screens/YouWin';
 
-
+// remove console and yellow box warnings
+window.performance.clearMeasures = ()=>{}
+window.performance.clearMarks = ()=>{}
+window.performance.measure = ()=>{}
+window.performance.mark = ()=>{}
+YellowBox.ignoreWarnings(
+  [`Expected style "lineHeight:`,
+  `THREE.WebGLRenderer: OES_texture_`,
+  `Native splash screen`]
+)
 const Stack = createStackNavigator();
 
 const App = () => {
