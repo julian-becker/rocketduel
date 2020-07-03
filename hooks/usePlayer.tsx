@@ -1,6 +1,7 @@
 import { MIN_MORTAR_ELEVATION } from '../lib/gameMechanics';
 
 const DEFAULT_STATE = {
+  level: 0,
   isLocated: false,
   location: {
     coords: [0, 0], // use geoJSON-style coordinates
@@ -16,6 +17,10 @@ const DEFAULT_STATE = {
 
 const playerReducer = (state, action) => {
   switch (action.type) {
+    case 'LEVEL_UP':
+      return { ...state, level: state.level++ };
+    case 'START_OVER':
+      return { ...state, level: 0 };
     case 'UPDATE_LOCATION':
       return { ...state, location: action.value, isLocated: true };
     case 'UPDATE_AZIMUTH':

@@ -1,15 +1,14 @@
 import React, { createContext, useReducer } from 'react';
-import { DEFAULT_STATE as initialTargetState, initTarget, targetReducer } from '../hooks/useTarget';
+import { DEFAULT_STATE as initialTargetState, initTargets, targetReducer } from '../hooks/useTarget';
 
 const TargetContext = createContext(initialTargetState);
 
 const TargetProvider = (props) => {
 
-  const { coords, children } = props;
-  const [ target, dispatchTarget ] = useReducer(targetReducer, coords, initTarget);
-
+  const { player, children } = props;
+  const [ targets, dispatchTarget ] = useReducer(targetReducer, player, initTargets);
   return (
-    <TargetContext.Provider value={{ target, dispatchTarget }}>
+    <TargetContext.Provider value={{ targets, dispatchTarget }}>
       {children}
     </TargetContext.Provider>
   )

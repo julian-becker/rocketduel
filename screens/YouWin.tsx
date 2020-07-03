@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { PlayerContext } from '../contexts/Player';
+
 import { BodyText, Header } from '../components/styled/Text';
-import Container from '../components/styled/Container'
+import levels from '../lib/levels';
+import Container from '../components/styled/Container';
 import Button from '../components/styled/Button';
 import { red, white } from '../components/styled/Colors'
 
-const YouWin = () => {
-  const navigation = useNavigation();
+const YouWin = ({ route, navigation }) => {
+
+  const { dispatchPlayer } = useContext(PlayerContext);
+  const { level } = route.params;
+
+  const gameOver = () => {
+    return level >= levels.length - 1;
+  }
+
   const handleOnPress = () => {
+    gameOver() ? dispatchPlayer({type: 'START_OVER'}) : null;
     navigation.navigate('Game');
   }
+
   return (
     <Container>
         <View style={styles.header}>
-          <Header accessibilityID="youWinHeader">You Win!</Header>
-          <BodyText accessibilityId="youWinBodyText">The target was destroyed.</BodyText>
+          <Header accessibilityID="youWinHeader">{gameOver() ? `You Win!` : `Level Complete`}</Header>
+          <BodyText accessibilityId="youWinBodyText">{gameOver() ? `All Targets Destroyed.` : `On to the next wave.`}</BodyText>
         </View>
         <View style={styles.actions}>
-          <Button text='New Game' textColor={white} backgroundColor={red} onClick={() => handleOnPress()}/>
+          <Button text={gameOver() ? `New Game` : `Next Level`} textColor={white} backgroundColor={red} onClick={() => handleOnPress()}/>
         </View>
     </Container>
   );

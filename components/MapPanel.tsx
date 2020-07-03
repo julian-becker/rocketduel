@@ -31,37 +31,24 @@ const MapPanel = () => {
     return accuracy < MIN_GPS_ACCURACY;
   }
 
-  const { target } = useContext(TargetContext);
-  const { coords, distance, health, isDestroyed } = target;
+  const { targets } = useContext(TargetContext);
   
   const { impacts } = useContext(ImpactContext);
   
   const cameraRef = useRef(undefined);
 
-  const [visible, setVisible] = useState(false);
-  // scope the map so that all targets are on it, but no broader
-  const mapDist = Math.sqrt(2 * (distance * distance)); // the mf'n Pythagorean Theorem y'all
-  const neCoords = turf.destination(turf.point(location.coords), mapDist, azimuthToBearing(45), {units: 'meters'}).geometry.coordinates;
-  const swCoords = turf.destination(turf.point(location.coords), mapDist, azimuthToBearing(225), {units: 'meters'}).geometry.coordinates;
-
-  const mapBounds = [
-    [neCoords[0], neCoords[1]],
-    [swCoords[0], swCoords[1]],
-  ];
-  const [ bounds, setBounds ] = useState({
-    ne: mapBounds[0],
-    sw: mapBounds[1],
-    padding: 20,
-    animationDuration: 1000,
-  })
   useEffect(() => {
     MapboxGL.setTelemetryEnabled(false);
   });
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
-
+  const renderTarget = (target, index) => {
+    const { coords, id, type } = target;
+    return (
+      <MapboxGL.MarkerView key={id} id={id} anchor={{x: 0, y: 0}} coordinate={coords}>
+        <Robot type={type} {...target}/>
+      </MapboxGL.MarkerView>
+    )
+  }
  return (
   <View style={styles.panelBorder}>
     <View style={styles.panelInterior}>
@@ -73,7 +60,7 @@ const MapPanel = () => {
         logoEnabled={false}
         >
           <MapboxGL.Camera
-            bounds={bounds}
+            //bounds={bounds}
             animationDuration={2000}
             animationMode='easeTo'
             followUserLocation={true}
@@ -85,10 +72,8 @@ const MapPanel = () => {
           <MapboxGL.MarkerView id='player' coordinate={location.coords}>
             <PlayerIcon />
           </MapboxGL.MarkerView>
-          <MapboxGL.MarkerView id='target' anchor={{x: 0, y: 0}} coordinate={coords}>
-            <Robot />
-          </MapboxGL.MarkerView>
-          {impacts.map((impact: object, i: number) => {
+          { targets.length > 0 ? targets.map((target: object, i: number) => renderTarget(target, i)) : null }
+          { impacts.map((impact: object, i: number) => {
             return (<MapboxGL.MarkerView key={`impact${i}`} id={`impact${i}`} coordinate={impact.impactCoords}>
               <CraterIcon />
             </MapboxGL.MarkerView>)

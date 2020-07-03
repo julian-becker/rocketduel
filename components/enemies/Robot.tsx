@@ -4,19 +4,16 @@
 //
 */
 
-import React, { useContext } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { TargetContext } from '../../contexts/Target';
 import { calculatePerceivedHeight } from '../../lib/helpers';
 import RobotIcon from './RobotIcon';
 import { INITIAL_HEALTH } from '../../lib/gameMechanics';
 import { black, green, red } from '../styled/Colors';
 
 const Robot = (props) => {
-
-  const { target } = useContext(TargetContext);
-  const { coords, distance, health, isDestroyed } = target;
+  const { coords, distance, health, isDestroyed, type, useScale} = props;
   const remainingHealth = INITIAL_HEALTH - health
 
   const ROBOT_HEIGHT = 8; // meters
@@ -30,7 +27,7 @@ const Robot = (props) => {
       borderColor={black}
       borderRadius={0}
       width={40}/>
-      <RobotIcon height={props.useScale ? perceivedHeight : null}/>
+      <RobotIcon type={type} height={useScale ? perceivedHeight : null}/>
     </View>
   )
 }

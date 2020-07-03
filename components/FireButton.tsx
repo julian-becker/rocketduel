@@ -35,8 +35,8 @@ const FireButton = () => {
     Player.playSound('rocketLaunch');
   }
 
-  const regenerateTarget = (coords: Array<number>) => {
-    dispatchTarget({type: 'REGENERATE_TARGET', value: coords});
+  const regenerateTargets = (coords: Array<number>) => {
+    dispatchTarget({type: 'CREATE_TARGETS', value: player});
     dispatchImpact({type: 'CLEAR_IMPACTS'});
   }
 
@@ -60,8 +60,8 @@ const FireButton = () => {
         onPress={() => onPressFire()}>
         { safeToFire() ? <RocketIcon /> : <HazardIcon /> }
       </AwesomeButton>
-      <TouchableOpacity onPress={() => regenerateTarget(coords)} >
-        <BodyText align='center' color={white}>Regenerate Target</BodyText>
+      <TouchableOpacity onPress={() => regenerateTargets(coords)} >
+        <BodyText align='center' color={white}>Regenerate Targets</BodyText>
       </TouchableOpacity>
       { projectile.isInFlight ? <Projectile /> : null }
     </View>

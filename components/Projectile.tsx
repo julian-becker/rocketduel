@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
 import { PlayerContext } from '../contexts/Player';
 import { TargetContext } from '../contexts/Target';
@@ -9,39 +8,38 @@ import { ImpactContext } from '../contexts/Impact';
 
 // dummy component for managing projectile logic
 const Projectile = () => {
-  const navigation = useNavigation();
 
   // destructure the needed info
   const { player } = useContext(PlayerContext);
  
   const { location } = player;
-  const { altitude, coords } = location;
-  const { target, dispatchTarget } = useContext(TargetContext);
-  const { health } = target;
+  const { targets, dispatchTarget } = useContext(TargetContext);
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
+  const { thrust, elevation, azimuth } = projectile;
   const { dispatchImpact } = useContext(ImpactContext);
 
   useEffect(() => {
-    const { thrust, elevation, azimuth } = projectile;
-    const impact = calculateImpact({
-      originCoords: coords,
-      targetCoords: target.coords,
-      velocity: convertThrust(Number(thrust)),
-      elevation: Number(elevation),
-      azimuth: azimuth,
-      height: Number(altitude)
-    });
-    console.log(`proximity: ${impact.proximity}`);
-    const damage = calculateDamage(impact.proximity);
-    // Player.playSound('blastMiss'); TODO: add in when timing is implemented
     setTimeout(() => {
       dispatchProjectile({ type: 'LANDED' });
-      dispatchTarget({ type: 'UPDATE_HEALTH', value: damage });
-      dispatchImpact({type: 'ADD_IMPACT', value: impact });
-      if (damage >= health) {
-        navigation.navigate('YouWin');
+      if (targets.length > 0) {
+        targets.forEach((target) => {
+          const { coords, health, id } = target;
+          const impact = calculateImpact({
+            originCoords: location.coords,
+            targetCoords: coords,
+            velocity: convertThrust(Number(thrust)),
+            elevation: Number(elevation),
+            azimuth: azimuth,
+            height: Number(location.altitude)
+          });
+          dispatchImpact({type: 'ADD_IMPACT', value: impact });
+          console.log(`proximity: ${impact.proximity}`);
+          const damage = calculateDamage(impact.proximity);
+          console.log(`target ${id} took ${damage} damage and now has ${health} health`);
+          // Player.playSound('blastMiss'); TODO: add in when timing is implemented
+          dispatchTarget({ type: 'CAUSE_DAMAGE', value: {id: id, damage: damage }});
+        })
       }
-      
     }, 1000)
   }, []);
 
