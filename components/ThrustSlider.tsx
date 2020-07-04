@@ -9,7 +9,7 @@ import SliderKnob from './SliderKnob';
 const ThrustSlider = () => {
 
   const { game, dispatchGame } = useContext(GameContext);
-  const { thrust } = player.game;
+  const { thrust } = game.player;
 
   const handleThrustChange = async () => {
     const options = {

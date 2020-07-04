@@ -57,7 +57,7 @@ const Launcher = () => {
     }
   }, []);
 
-  const { game } = useGame(GameContext);
+  const { game } = useContext(GameContext);
   const { player } = game;
   const { projectile } = useContext(ProjectileContext);
   const { azimuth, elevation, isInFlight, thrust } = projectile;
