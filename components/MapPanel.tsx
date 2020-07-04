@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, StyleSheet, View, ActivityIndicator } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import * as Progress from 'react-native-progress';
 import * as appData from '../app.json';
 import * as turf from '@turf/turf';
 import { azimuthToBearing } from 'projectile-trajectory';
 import { GameContext } from '../contexts/Game';
 import { ImpactContext } from '../contexts/Impact';
-import { black, white, silver } from './styled/Colors';
+import { black, green, red, silver, white } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
 import Crater from './Crater';
 import Robot from './enemies/Robot';
-import { MIN_GPS_ACCURACY } from '../lib/gameMechanics';
+import { INITIAL_HEALTH, MIN_GPS_ACCURACY } from '../lib/gameMechanics';
 
 // panel sizing
 const deviceWidth = Dimensions.get('screen').width - 10;
@@ -39,9 +40,19 @@ const MapPanel = () => {
   });
 
   const renderTarget = (target) => {
-    const { coords, id, type } = target;
+    const { coords, id, type, health, isDestroyed } = target;
+    const remainingHealth = INITIAL_HEALTH - health
     return (
       <MapboxGL.MarkerView key={id} id={id} anchor={{x: -0.2, y: 0.9}} coordinate={coords}>
+          { isDestroyed ? null : 
+            <Progress.Bar 
+              progress={remainingHealth / 100}
+              color={red}
+              unfilledColor={green.lime}
+              borderColor={black}
+              borderRadius={0}
+              width={40}/> 
+          }
         <Robot type={type} {...target}/>
       </MapboxGL.MarkerView>
     )

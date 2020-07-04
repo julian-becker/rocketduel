@@ -42,8 +42,7 @@ const gameReducer = (state, action) => {
     case 'CREATE_TARGETS':
       return { ...state, targets: action.value};
     case 'DAMAGE_TARGETS':
-      const { targets, remainingTargets } = action.value;
-      return { ...state, targets: targets, levelOver: remainingTargets === 0};
+      return { ...state, targets: action.value};
     default:
       return { ...state };
   }

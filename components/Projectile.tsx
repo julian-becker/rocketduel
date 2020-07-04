@@ -17,15 +17,22 @@ const Projectile = () => {
   const { dispatchImpact } = useContext(ImpactContext);
 
   useEffect(() => {
+
     setTimeout(() => {
       dispatchProjectile({ type: 'LANDED' });
       const impact = generateImpact({origin: location, projectile: projectile});
       dispatchImpact({type: 'ADD_IMPACT', value: impact });
       const { damagedTargets, remainingTargets } = damageTargets({impact: impact, targets: targets});
-
-      dispatchGame({type: 'DAMAGE_TARGETS', value: { targets: damagedTargets, remainingTargets: remainingTargets}});
+      dispatchGame({type: 'DAMAGE_TARGETS', value: damagedTargets});
+      if (remainingTargets === 0) {
+        setTimeout(() => {
+          dispatchGame({type: 'LEVEL_OVER'});
+        }, 5000)
+      }
     }, 1000)
-  }, []);
+
+    return clearTimeout();
+  }, [targets]);
 
 
   return (
