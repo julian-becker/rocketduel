@@ -8,8 +8,8 @@ import { GameContext } from '../contexts/Game';
 import { ImpactContext } from '../contexts/Impact';
 import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
+import Crater from './Crater';
 import Robot from './enemies/Robot';
-import CraterIcon from './CraterIcon';
 import { MIN_GPS_ACCURACY } from '../lib/gameMechanics';
 
 // panel sizing
@@ -30,9 +30,8 @@ const MapPanel = () => {
     return accuracy < MIN_GPS_ACCURACY;
   }
 
-  
   const { impacts } = useContext(ImpactContext);
-  
+
   const cameraRef = useRef(undefined);
 
   useEffect(() => {
@@ -47,40 +46,46 @@ const MapPanel = () => {
       </MapboxGL.MarkerView>
     )
   }
- return (
-  <View style={styles.panelBorder}>
-    <View style={styles.panelInterior}>
-      {isLocated(location.accuracy) ? 
-        <MapboxGL.MapView
-        style={styles.map}
-        styleURL={'mapbox://styles/mekablitz/ckb5jru9k1oi51ila2hu6dwbw'}
-        compassEnabled={false}
-        logoEnabled={false}
-        >
-          <MapboxGL.Camera
-            //bounds={bounds}
-            animationDuration={2000}
-            animationMode='easeTo'
-            followUserLocation={true}
-            followUserMode='compass'
-            minZoomLevel={12}
-            maxZoomLevel={19}
-            centerCoordinate={location.coords}
-          />
-          <MapboxGL.MarkerView id='player' coordinate={location.coords}>
-            <PlayerIcon />
-          </MapboxGL.MarkerView>
-          { targets.length > 0 ? targets.map((target: object, i: number) => renderTarget(target, i)) : null }
-          { impacts.map((impact: object, i: number) => {
-            return (<MapboxGL.MarkerView key={`impact${i}`} id={`impact${i}`} coordinate={impact.impactCoords}>
-              <CraterIcon />
-            </MapboxGL.MarkerView>)
-          })}
-        </MapboxGL.MapView>
-      : <ActivityIndicator size='large' />}
+
+  const renderImpact = (impact) => {
+    const { id, impactCoords, mapComponent } = impact;
+    return (
+      <MapboxGL.MarkerView key={id} id={id} coordinate={impactCoords}>
+        <Crater id={id} craterIcon={mapComponent}/>
+      </MapboxGL.MarkerView>
+    )
+  }
+
+  return (
+    <View style={styles.panelBorder}>
+      <View style={styles.panelInterior}>
+        {isLocated(location.accuracy) ? 
+          <MapboxGL.MapView
+          style={styles.map}
+          styleURL={'mapbox://styles/mekablitz/ckb5jru9k1oi51ila2hu6dwbw'}
+          compassEnabled={false}
+          logoEnabled={false}
+          >
+            <MapboxGL.Camera
+              //bounds={bounds}
+              animationDuration={2000}
+              animationMode='easeTo'
+              followUserLocation={true}
+              followUserMode='compass'
+              minZoomLevel={12}
+              maxZoomLevel={19}
+              centerCoordinate={location.coords}
+            />
+            <MapboxGL.MarkerView id='player' coordinate={location.coords}>
+              <PlayerIcon />
+            </MapboxGL.MarkerView>
+            { targets.length > 0 ? targets.map((target: object, i: number) => renderTarget(target)) : null }
+            { impacts.map((impact: object, i: number) => renderImpact(impact, i)) }
+          </MapboxGL.MapView>
+        : <ActivityIndicator size='large' />}
+      </View>
     </View>
-  </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({
