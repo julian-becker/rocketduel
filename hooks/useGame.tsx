@@ -1,5 +1,4 @@
 import { MIN_MORTAR_ELEVATION } from '../lib/gameMechanics';
-import { initTargets } from '../actions/targets';
 
 const DEFAULT_STATE = {
   level: 0,
@@ -25,8 +24,7 @@ const gameReducer = (state, action) => {
     // Game management
     case 'NEXT_LEVEL':
       const newLevel = state.level++;
-      //const targetsForLevel = initTargets({level: newLevel, coords: state.player.location.coords});
-      return { ...state, level: state.level++, levelOver: false};
+      return { ...state, level: newLevel, levelOver: false};
     case 'LEVEL_OVER':
       return { ...state, levelOver: true };
     case 'RESTART_GAME':
