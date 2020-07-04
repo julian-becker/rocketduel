@@ -17,8 +17,8 @@ const FireButton = () => {
 
   // destructure the needed info
   const { game, dispatchGame } = useContext(GameContext);
-  const { player } = game;
-  const { location, elevation, thrust, azimuth, level } = player;
+  const { player, level } = game;
+  const { location, elevation, thrust, azimuth } = player;
   const { coords } = location;
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
   const { isInFlight } = projectile;
