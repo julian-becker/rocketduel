@@ -5,23 +5,13 @@
 */
 
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
-
-const player = require('../assets/player.png');
+import Arrow from '../assets/arrow.svg';
 
 const PlayerIcon = () => {
 
   return (
-    <Image style={styles.player} source={player} />
+    <Arrow height={16}/>
   )
 }
-
-const styles = StyleSheet.create({
-  player: {
-    backgroundColor: 'transparent',
-    height: 35,
-    width: 35
-  }
-});
 
 export default PlayerIcon;
