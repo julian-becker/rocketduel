@@ -6,6 +6,7 @@ import useCompass from '../hooks/useCompass';
 import useGyroscope from '../hooks/useGyroscope';
 
 import { PlayerContext } from '../contexts/Player';
+import { GameContext } from '../contexts/Game';
 import { TargetProvider } from '../contexts/Target';
 import { ProjectileProvider } from '../contexts/Projectile';
 import { ImpactProvider } from '../contexts/Impact';
@@ -13,18 +14,16 @@ import { ImpactProvider } from '../contexts/Impact';
 
 const GameScreen = () => {
   // start getting compass data
-  const { player, dispatchPlayer } = useContext(PlayerContext);
-  useCompass(dispatchPlayer);
-  useGyroscope(dispatchPlayer);
-
+  const { dispatchGame } = useContext(GameContext);
+  useCompass(dispatchGame);
+  useGyroscope(dispatchGame);
+  
   return (
-    <TargetProvider player={player}>
-      <ProjectileProvider>
-        <ImpactProvider>
-          <GameBackground />
-        </ImpactProvider>
-      </ProjectileProvider>
-    </TargetProvider>
+    <ProjectileProvider>
+      <ImpactProvider>
+        <GameBackground />
+      </ImpactProvider>
+    </ProjectileProvider>
   );
 }
 

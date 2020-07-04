@@ -4,8 +4,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import * as appData from '../app.json';
 import * as turf from '@turf/turf';
 import { azimuthToBearing } from 'projectile-trajectory';
-import { PlayerContext } from '../contexts/Player';
-import { TargetContext } from '../contexts/Target';
+import { GameContext } from '../contexts/Game';
 import { ImpactContext } from '../contexts/Impact';
 import { black, white, silver } from './styled/Colors';
 import PlayerIcon from './PlayerIcon';
@@ -23,15 +22,14 @@ MapboxGL.setAccessToken(appData.mapbox.apiKey);
 const MapPanel = () => {
 
   // destructure the needed info
-  const { player } = useContext(PlayerContext);
-
-  const { location, elevation } = player;
+  const { game } = useContext(GameContext);
+  const { player, targets } = game
+  const { location } = player;
 
   const isLocated = (accuracy: number) => {
     return accuracy < MIN_GPS_ACCURACY;
   }
 
-  const { targets } = useContext(TargetContext);
   
   const { impacts } = useContext(ImpactContext);
   
@@ -41,7 +39,7 @@ const MapPanel = () => {
     MapboxGL.setTelemetryEnabled(false);
   });
 
-  const renderTarget = (target, index) => {
+  const renderTarget = (target) => {
     const { coords, id, type } = target;
     return (
       <MapboxGL.MarkerView key={id} id={id} anchor={{x: 0, y: 0}} coordinate={coords}>

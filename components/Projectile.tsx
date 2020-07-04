@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { View } from 'react-native';
-import { calculateImpact, convertThrust, calculateDamage } from '../lib/gameMechanics';
-import { PlayerContext } from '../contexts/Player';
-import { TargetContext } from '../contexts/Target';
+import { generateImpact } from '../actions/impact';
+import { damageTargets } from '../actions/targets';
+import { GameContext } from '../contexts/Game';
 import { ProjectileContext } from '../contexts/Projectile';
 import { ImpactContext } from '../contexts/Impact';
 
@@ -10,36 +10,20 @@ import { ImpactContext } from '../contexts/Impact';
 const Projectile = () => {
 
   // destructure the needed info
-  const { player } = useContext(PlayerContext);
- 
+  const { game, dispatchGame } = useContext(GameContext);
+  const { player, targets } = game
   const { location } = player;
-  const { targets, dispatchTarget } = useContext(TargetContext);
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
-  const { thrust, elevation, azimuth } = projectile;
   const { dispatchImpact } = useContext(ImpactContext);
 
   useEffect(() => {
     setTimeout(() => {
       dispatchProjectile({ type: 'LANDED' });
-      if (targets.length > 0) {
-        targets.forEach((target) => {
-          const { coords, health, id } = target;
-          const impact = calculateImpact({
-            originCoords: location.coords,
-            targetCoords: coords,
-            velocity: convertThrust(Number(thrust)),
-            elevation: Number(elevation),
-            azimuth: azimuth,
-            height: Number(location.altitude)
-          });
-          dispatchImpact({type: 'ADD_IMPACT', value: impact });
-          console.log(`proximity: ${impact.proximity}`);
-          const damage = calculateDamage(impact.proximity);
-          console.log(`target ${id} took ${damage} damage and now has ${health} health`);
-          // Player.playSound('blastMiss'); TODO: add in when timing is implemented
-          dispatchTarget({ type: 'CAUSE_DAMAGE', value: {id: id, damage: damage }});
-        })
-      }
+      const impact = generateImpact({origin: location, projectile: projectile});
+      dispatchImpact({type: 'ADD_IMPACT', value: impact });
+      const { damagedTargets, remainingTargets } = damageTargets({impact: impact, targets: targets});
+
+      dispatchGame({type: 'DAMAGE_TARGETS', value: { targets: damagedTargets, remainingTargets: remainingTargets}});
     }, 1000)
   }, []);
 

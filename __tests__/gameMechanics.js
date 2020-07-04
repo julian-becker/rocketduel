@@ -18,6 +18,7 @@ import {
   getShotDuration, 
   getTrajectory
 } from '../lib/gameMechanics';
+import { generateImpact } from '../actions/impact';
 
 test('correctly converts thrusts', () => {
   expect(convertThrust(0)).toBe(MIN_THRUST);
@@ -58,29 +59,34 @@ test('calculates trajectory', () => {
 });
 
 test('records a hit', () => {
-  const params = {
+  const origin = {
+    coords: [40.21034, -80.604]
+  };
+  const projectile = {
     azimuth: 141,
     elevation: 60,
-    velocity: convertThrust(70),
+    thrust: convertThrust(70),
     height: 0,
-    originCoords: [40.21034, -80.604],
-    targetCoords: [40.236727, -80.60925],
   }
-  const impact = calculateImpact(params);
-  console.log(impact)
-  expect(+impact.proximity.toFixed(5)).toBeLessThanOrEqual(BLAST_RADIUS);
+  const targetCoords = [40.24332, -80.61072];
+  const impact = generateImpact({origin: origin, projectile: projectile});
+  const proximity = getImpactProximity(impact.impactCoords, targetCoords);
+  expect(+proximity.toFixed(5)).toBeLessThanOrEqual(BLAST_RADIUS);
 });
 
 test('records a miss', () => {
-  const params = {
+  const origin = {
+    coords: [40.21034, -80.604]
+  };
+  const projectile = {
     azimuth: 254,
     elevation: 73,
-    velocity: convertThrust(50),
+    thrust: convertThrust(50),
     height: 0,
-    originCoords: [40.21034, -80.604],
-    targetCoords: [40.21712, -80.59608],
   }
-  const { proximity } = calculateImpact(params);
+  const targetCoords = [40.21712, -80.59608];
+  const impact = generateImpact({origin: origin, projectile: projectile});
+  const proximity = getImpactProximity(impact.impactCoords, targetCoords);
   expect(+proximity.toFixed(5)).toBeGreaterThanOrEqual(BLAST_RADIUS);
 });
 

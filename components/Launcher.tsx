@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import * as THREE from 'three';
 import { GLView } from 'expo-gl';
 import { Renderer, TextureLoader, loadAsync, utils } from 'expo-three';
 import { TweenLite, gsap } from 'gsap';
 import { convertThrust } from '../lib/gameMechanics';
-import { PlayerContext } from '../contexts/Player';
+import { GameContext } from '../contexts/Game';
 import { ProjectileContext } from '../contexts/Projectile';
 import { trigToDegrees } from '../lib/gameMechanics';
 
@@ -57,7 +57,8 @@ const Launcher = () => {
     }
   }, []);
 
-  const { player } = useContext(PlayerContext);
+  const { game } = useGame(GameContext);
+  const { player } = game;
   const { projectile } = useContext(ProjectileContext);
   const { azimuth, elevation, isInFlight, thrust } = projectile;
 

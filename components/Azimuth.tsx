@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 import { BodyText } from './styled/Text';
-import { PlayerContext } from '../contexts/Player';
+import { GameContext } from '../contexts/Game';
 import { blue, white } from './styled/Colors';
 
 const Azimuth = () => {
 
-  const { dispatchPlayer } = useContext(PlayerContext);
+  const { dispatchGame } = useContext(GameContext);
 
   const handleChangeText = (text: string) => {
-    dispatchPlayer({type: 'UPDATE_AZIMUTH', value: Number(text)});
+    dispatchGame({type: 'UPDATE_AZIMUTH', value: Number(text)});
   }
   return (
     <View style={styles.wrap}>

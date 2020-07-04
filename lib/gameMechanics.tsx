@@ -97,7 +97,7 @@ const getTrajectory = (parameters: Object) => {
 }
 
 const calculateImpact = (parameters: Object) => {
-  const { azimuth, originCoords, targetCoords, elevation, height, velocity } = parameters;
+  const { azimuth, originCoords, elevation, height, velocity } = parameters;
   // new library!  🎉
   const shotParams = {
     initialCoords: [originCoords[1], originCoords[0]],
@@ -113,8 +113,7 @@ const calculateImpact = (parameters: Object) => {
   const { finalCoords, distance, duration } = calculateTrajectory(shotParams, projectileParams, environmentParams);
   // swap impact coords back out due to turf lat/long reversal
   const impactCoords = [finalCoords[1], finalCoords[0]];
-  const proximity = getImpactProximity(impactCoords, targetCoords);
-  return { distance: distance, impactCoords: impactCoords, proximity: proximity, time: duration };
+  return { distance: distance, impactCoords: impactCoords, time: duration };
 }
 
 const calculateDamage = (proximity: number) => {

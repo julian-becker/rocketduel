@@ -3,24 +3,23 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { BodyText } from './styled/Text';
 import { MIN_MORTAR_ELEVATION, MAX_MORTAR_ELEVATION } from '../lib/gameMechanics';
+import { initTargets } from '../actions/targets';
 import { red, white } from './styled/Colors';
 import Player from '../lib/Player';
 import RocketIcon from './RocketIcon';
 import HazardIcon from './HazardIcon';
 import Projectile from './Projectile';
-import { PlayerContext } from '../contexts/Player';
-import { TargetContext } from '../contexts/Target';
+import { GameContext } from '../contexts/Game';
 import { ProjectileContext } from '../contexts/Projectile';
 import { ImpactContext } from '../contexts/Impact';
 
 const FireButton = () => {
 
   // destructure the needed info
-  const { player } = useContext(PlayerContext);
- 
-  const { location, elevation, thrust, azimuth } = player;
+  const { game, dispatchGame } = useContext(GameContext);
+  const { player } = game;
+  const { location, elevation, thrust, azimuth, level } = player;
   const { coords } = location;
-  const { dispatchTarget } = useContext(TargetContext);
   const { projectile, dispatchProjectile } = useContext(ProjectileContext);
   const { isInFlight } = projectile;
   const { dispatchImpact } = useContext(ImpactContext);
@@ -36,7 +35,8 @@ const FireButton = () => {
   }
 
   const regenerateTargets = (coords: Array<number>) => {
-    dispatchTarget({type: 'CREATE_TARGETS', value: player});
+    const newTargets = initTargets({ level: level, coords: coords});
+    dispatchGame({type: 'CREATE_TARGETS', value: newTargets});
     dispatchImpact({type: 'CLEAR_IMPACTS'});
   }
 
