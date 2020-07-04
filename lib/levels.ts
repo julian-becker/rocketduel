@@ -2,7 +2,7 @@ const levels: Array<object> =
   [
     {
       enemies: {
-        'red': 1 //testing; change back to 1 when multiple targets working
+        'red': 1
       }
     },
     {

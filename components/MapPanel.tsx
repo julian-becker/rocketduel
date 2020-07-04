@@ -23,7 +23,7 @@ const MapPanel = () => {
 
   // destructure the needed info
   const { game } = useContext(GameContext);
-  const { player, targets } = game
+  const { player, targets } = game;
   const { location } = player;
 
   const isLocated = (accuracy: number) => {
@@ -41,7 +41,7 @@ const MapPanel = () => {
   const renderTarget = (target) => {
     const { coords, id, type } = target;
     return (
-      <MapboxGL.MarkerView key={id} id={id} anchor={{x: 0, y: 0}} coordinate={coords}>
+      <MapboxGL.MarkerView key={id} id={id} anchor={{x: -0.2, y: 0.9}} coordinate={coords}>
         <Robot type={type} {...target}/>
       </MapboxGL.MarkerView>
     )
@@ -76,7 +76,7 @@ const MapPanel = () => {
               maxZoomLevel={19}
               centerCoordinate={location.coords}
             />
-            <MapboxGL.MarkerView id='player' coordinate={location.coords}>
+            <MapboxGL.MarkerView id='player' anchor={{x: 0.5, y: 0.5}} coordinate={location.coords}>
               <PlayerIcon />
             </MapboxGL.MarkerView>
             { targets.length > 0 ? targets.map((target: object, i: number) => renderTarget(target)) : null }

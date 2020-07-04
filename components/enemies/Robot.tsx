@@ -4,11 +4,12 @@
 //
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { calculatePerceivedHeight } from '../../lib/helpers';
 import RobotIcon from './RobotIcon';
+import DestroyedIcon from './DestroyedIcon';
 import { INITIAL_HEALTH } from '../../lib/gameMechanics';
 import { black, green, red } from '../styled/Colors';
 
@@ -18,18 +19,23 @@ const Robot = (props) => {
 
   const ROBOT_HEIGHT = 8; // meters
   const perceivedHeight = calculatePerceivedHeight(ROBOT_HEIGHT, distance);
-  return ( 
-    <View>
-      <Progress.Bar 
-      progress={remainingHealth / 100}
-      color={red}
-      unfilledColor={green.lime}
-      borderColor={black}
-      borderRadius={0}
-      width={40}/>
-      <RobotIcon type={type} height={useScale ? perceivedHeight : null}/>
-    </View>
-  )
+  const height = useScale ? perceivedHeight : null
+  if (isDestroyed) {
+    return <DestroyedIcon type={type} height={height}/>
+  } else {
+    return (
+      <View>
+        <Progress.Bar 
+          progress={remainingHealth / 100}
+          color={red}
+          unfilledColor={green.lime}
+          borderColor={black}
+          borderRadius={0}
+          width={40}/>
+        <RobotIcon type={type} height={useScale ? perceivedHeight : null}/>
+      </View>
+    )
+  }
 }
 
 export default Robot;
