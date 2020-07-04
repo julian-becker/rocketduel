@@ -7,6 +7,7 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import * as Progress from 'react-native-progress';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { calculatePerceivedHeight } from '../../lib/helpers';
 import RobotIcon from './RobotIcon';
 import DestroyedIcon from './DestroyedIcon';
@@ -15,6 +16,14 @@ import { black, green, red } from '../styled/Colors';
 
 const Robot = (props) => {
   const { coords, distance, health, isDestroyed, type, useScale} = props;
+  useEffect(() => {
+    const feedbackType = isDestroyed ? 'impactHeavy' : 'impactMedium';
+    const options = {
+      enableVibrateFallback: false,
+      ignoreAndroidSystemSettings: false
+    };
+    ReactNativeHapticFeedback.trigger(feedbackType, options);
+  }, [health])
   const remainingHealth = INITIAL_HEALTH - health
 
   const ROBOT_HEIGHT = 8; // meters
