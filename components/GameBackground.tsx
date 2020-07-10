@@ -9,6 +9,7 @@ import TopHalf from '../components/TopHalf';
 import BottomHalf from '../components/BottomHalf';
 import Robot from './enemies/Robot';
 import Launcher from './Launcher';
+import GameWorld from './GameWorld';
 
 const backgroundImage = Asset.fromModule(require('../assets/backgrounds/seamless-panoramic.jpg'));
 const imageWidth = backgroundImage.width;
@@ -45,20 +46,7 @@ const GameBackground = () => {
   }
  
   return (
-    <PanoramaView
-      style={styles.panorama}
-      dimensions={{ height: Dimensions.get("window").height, width: Dimensions.get("window").width }}
-      inputType="mono"
-      enableTouchTracking={false}
-      onImageLoaded={onBackgroundLoaded}
-      imageUrl={backgroundImage.uri}>
-        { /* robots go here */ }
-        { targets.length > 0 ? targets.forEach((target) => renderTarget(target)) : null }
-        { /* rlauncher needs to be full-screen */ }
-        { !isEmulatorSync() ? <Launcher /> : null }
-        <TopHalf />
-        <BottomHalf />
-    </PanoramaView>
+    <GameWorld />
   );
 }
 
