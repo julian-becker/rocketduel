@@ -5,9 +5,7 @@ import GameBackground from '../components/GameBackground';
 import useCompass from '../hooks/useCompass';
 import useGyroscope from '../hooks/useGyroscope';
 
-import { PlayerContext } from '../contexts/Player';
 import { GameContext } from '../contexts/Game';
-import { TargetProvider } from '../contexts/Target';
 import { ProjectileProvider } from '../contexts/Projectile';
 import { ImpactProvider } from '../contexts/Impact';
 

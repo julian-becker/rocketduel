@@ -70,6 +70,9 @@ const FireButton = () => {
 
 const styles = StyleSheet.create({
   buttons: {
+    position: 'absolute',
+    bottom: '10%',
+    right: '10%',
     alignItems: 'center'
   },
 });

@@ -59,7 +59,9 @@ const ThrustSlider = () => {
 
 const styles = StyleSheet.create({
   thrust: {
-    flex: 1,
+    position: 'absolute',
+    left: '-10%',
+    bottom: '20%',
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -9,7 +9,9 @@ import TopHalf from '../components/TopHalf';
 import BottomHalf from '../components/BottomHalf';
 import Robot from './enemies/Robot';
 import Launcher from './Launcher';
+import FireButton from '../components/FireButton';
 import GameWorld from './GameWorld';
+import ThrustSlider from './ThrustSlider';
 
 const backgroundImage = Asset.fromModule(require('../assets/backgrounds/seamless-panoramic.jpg'));
 const imageWidth = backgroundImage.width;
@@ -46,7 +48,11 @@ const GameBackground = () => {
   }
  
   return (
-    <GameWorld />
+    <View style={{flex: 1}}>
+      <GameWorld />
+      <ThrustSlider />
+      <FireButton />
+    </View>
   );
 }
 
