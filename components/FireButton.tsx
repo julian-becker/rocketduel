@@ -20,8 +20,8 @@ const FireButton = () => {
   const { player, level } = game;
   const { location, elevation, thrust, azimuth } = player;
   const { coords } = location;
-  const { projectile, dispatchProjectile } = useContext(ProjectileContext);
-  const { isInFlight } = projectile;
+  const { projectiles, dispatchProjectile } = useContext(ProjectileContext);
+  const { isReady, clip } = projectiles;
   const { dispatchImpact } = useContext(ImpactContext);
 
   const safeElevation = (elevation: number) => {
@@ -40,9 +40,25 @@ const FireButton = () => {
     dispatchImpact({type: 'CLEAR_IMPACTS'});
   }
 
+  const clipIsEmpty = () => {
+    return clip.length === 0;
+  };
+
   const safeToFire = () => {
-    return (safeElevation(elevation) && !isInFlight)
+    return (safeElevation(elevation) && isReady && !clipIsEmpty())
   }
+
+  const renderProjectile = (projectile) => {
+    return (<Projectile key={projectile.id} projectile={projectile} />);
+  };
+
+  const reloadButton = () => {
+    return (
+      <TouchableOpacity onPress={() => dispatchProjectile({type: 'RELOAD'})} >
+        <BodyText align='center' color={white}>Reload</BodyText>
+      </TouchableOpacity>
+    )
+  };
 
   return ( 
     <View style={styles.buttons}>
@@ -63,7 +79,8 @@ const FireButton = () => {
       <TouchableOpacity onPress={() => regenerateTargets(coords)} >
         <BodyText align='center' color={white}>Regenerate Targets</BodyText>
       </TouchableOpacity>
-      { projectile.isInFlight ? <Projectile /> : null }
+      { clipIsEmpty() ? reloadButton() : null}
+      { clip.map((projectile) => renderProjectile(projectile)) }
     </View>
   )
 }

@@ -1,14 +1,15 @@
 import React, { createContext, useReducer } from 'react';
 import { DEFAULT_STATE as initialProjectileState, projectileReducer } from '../hooks/useProjectile';
+import { initProjectiles } from '../actions/projectiles';
 
 const ProjectileContext = createContext(initialProjectileState);
 
 const ProjectileProvider = ({ children }) => {
 
-  const [ projectile, dispatchProjectile ] = useReducer(projectileReducer, initialProjectileState);
+  const [ projectiles, dispatchProjectile ] = useReducer(projectileReducer, initialProjectileState, initProjectiles);
 
   return (
-    <ProjectileContext.Provider value={{ projectile, dispatchProjectile }}>
+    <ProjectileContext.Provider value={{ projectiles, dispatchProjectile }}>
       {children}
     </ProjectileContext.Provider>
   )

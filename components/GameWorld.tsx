@@ -1,5 +1,5 @@
 // 3D environment to hold the Game universe
-import React, { useContext, Suspense } from 'react';
+import React, { useContext, useEffect, useState, Suspense } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as THREE from 'three';
 import { Canvas } from 'react-three-fiber';
@@ -19,13 +19,13 @@ const GameWorld = () => {
   const { game } = useContext(GameContext);
   const { player } = game;
 
-  const { projectile } = useContext(ProjectileContext);
+  const { projectiles } = useContext(ProjectileContext);
 
   return (
     <Canvas>
       <ambientLight />
       <Suspense fallback={<ActivityIndicator />}>
-        <Scene player={player} projectile={projectile}/>
+        <Scene player={player} projectiles={projectiles} />
       </Suspense>
     </Canvas>
   )

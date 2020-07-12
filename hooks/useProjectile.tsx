@@ -1,22 +1,23 @@
+import { fireProjectile, initProjectiles, landProjectile, loadNextProjectile } from '../actions/projectiles';
+
 const DEFAULT_STATE = {
-  coords: null, // projectile coords are only set on impact
-  altitude: 0,
-  thrust: 0, // set at launch
-  elevation: 0, // set at launch
-  azimuth: 0,
-  isInFlight: false,
-  isLanded: false
+  isReady: true,
+  clip: []
 }
 
 const projectileReducer = (state, action) => {
   switch (action.type) {
-    case 'UPDATE_COORDS':
-      return { ...state, coords: action.value };
+    case 'CREATE_PROJECTILES':
+      return { ...DEFAULT_STATE, clip: action.value}
     case 'FIRE':
-      const { elevation, thrust, azimuth } = action.value;
-      return { ...state, isInFlight: true, elevation: elevation, thrust: thrust, azimuth: azimuth };
-    case 'LANDED':
-      return { ...state, isInFlight: false, isLanded: true, coords: action.value};
+      return { ...state, clip: fireProjectile({projectiles: state.clip, params: action.value}), isReady: false };
+    case 'READY_TO_FIRE':
+      return { ...state, clip: loadNextProjectile(state.clip), isReady: true };
+    case 'LAND_PROJECTILE':
+      return { ...state, clip: landProjectile(action.value, state.clip) };
+    case 'RELOAD':
+      const newState = initProjectiles(DEFAULT_STATE);
+      return { ...newState };
     case 'CLEAR_PROJECTILE':
       return { ...state, ...DEFAULT_STATE};
     default:

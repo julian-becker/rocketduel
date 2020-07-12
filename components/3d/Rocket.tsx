@@ -1,15 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { TextureLoader, loadAsync } from 'expo-three';
 import { TweenLite } from 'gsap';
 
 const Rocket = (props) => {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
-  const [rocket, setRocket] = useState(new THREE.Mesh());
-
-  const angle = props.angle;
-  const visible = props.visible;
-
+  const [mesh, setMesh] = useState(new THREE.Mesh());
   useEffect(() => {
 
     const loadAssets = async () => {
@@ -39,28 +35,27 @@ const Rocket = (props) => {
 
       obj.scale.normalize().multiplyScalar(0.0008);
       obj.rotation.z = -0.08;
-      setRocket(obj);
+      setMesh(obj);
 
       setAssetsLoaded(true);
     };
     loadAssets();
   }, []);
+  const { angle, visible } = props;
   
   // mimic player device angle while in hand
   useEffect (() => {
-    TweenLite.to(rocket.rotation, 1/30, {
+    TweenLite.to(mesh.rotation, 1/30, {
       x: THREE.MathUtils.degToRad(angle - 90)
     })
   }, [angle]);
 
-  return assetsLoaded ? 
+  return assetsLoaded && visible ? (
     <primitive
       {...props}
-      ref={props.setRef}
-      visible={visible}
-      object={rocket}
+      object={mesh}
       />
-  : null
+  ) : null
 };
 
 export default Rocket;

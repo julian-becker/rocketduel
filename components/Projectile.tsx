@@ -7,33 +7,44 @@ import { ProjectileContext } from '../contexts/Projectile';
 import { ImpactContext } from '../contexts/Impact';
 
 // dummy component for managing projectile logic
-const Projectile = () => {
-
+const Projectile = ({ projectile }) => {
   // destructure the needed info
+  const { id, isInFlight } = projectile;
   const { game, dispatchGame } = useContext(GameContext);
   const { player, targets } = game
   const { location } = player;
-  const { projectile, dispatchProjectile } = useContext(ProjectileContext);
+  const { dispatchProjectile } = useContext(ProjectileContext);
   const { dispatchImpact } = useContext(ImpactContext);
 
   useEffect(() => {
-
-    setTimeout(() => {
-      dispatchProjectile({ type: 'LANDED' });
-      const impact = generateImpact({origin: location, projectile: projectile});
-      dispatchImpact({type: 'ADD_IMPACT', value: impact });
-      const { damagedTargets, remainingTargets } = damageTargets({impact: impact, targets: targets});
-      dispatchGame({type: 'DAMAGE_TARGETS', value: damagedTargets});
-      if (remainingTargets === 0) {
-        setTimeout(() => {
-          dispatchGame({type: 'LEVEL_OVER'});
-        }, 5000)
-      }
-    }, 1000)
-
+    if(isInFlight) {
+      setTimeout(() => {
+        dispatchProjectile({type: 'READY_TO_FIRE'})
+      }, 1000)
+    }
+ 
     return clearTimeout();
-  }, [targets]);
+  }, [isInFlight]);
 
+  useEffect(() => {
+    if(isInFlight) {
+      setTimeout(() => {
+        dispatchProjectile({ type: 'LAND_PROJECTILE', value: id });
+        const impact = generateImpact({origin: location, projectile: projectile});
+        dispatchImpact({type: 'ADD_IMPACT', value: impact });
+        const { damagedTargets, remainingTargets } = damageTargets({impact: impact, targets: targets});
+        dispatchGame({type: 'DAMAGE_TARGETS', value: damagedTargets});
+        if (remainingTargets === 0) {
+          setTimeout(() => {
+            dispatchGame({type: 'LEVEL_OVER'});
+          }, 5000)
+        }
+      }, 2000)
+    }
+ 
+    return clearTimeout();
+  }, [isInFlight]);
+  
 
   return (
     <View />
