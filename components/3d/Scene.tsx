@@ -1,31 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useThree } from 'react-three-fiber';
-import * as THREE from 'three';
-import { TextureLoader, loadAsync } from 'expo-three';
+import React from 'react';
 import World from './World';
-import Camera from './Camera';
 import Rocket from './Rocket';
+import Camera from './Camera';
 
 const Scene = (props) => {
-  const { player, projectiles } = props;
+  const { player, projectiles, assets } = props;
+  const { rocket, world } = assets
+  const { clip } = projectiles;
   const { azimuth, elevation } = player;
 
-  const isRocketVisible = (rocket) => { 
-    return rocket.isInFlight || rocket.isLoaded;
-  };
 
-  const renderRocket = (rocket) => {
-    // set up ref
-    const rocketRef = useRef();
-    return <Rocket setRef={rocketRef} key={rocket.id} id={rocket.id} visible={isRocketVisible(rocket)} angle={elevation} position={[-0.05,-0.27,-1]} />
+  const renderRocket = (_, i) => {
+    return (
+      <Rocket key={_.id} id={_.id} data={_} mesh={rocket.mesh} angle={elevation} position={[-0.05, -0.4, -1.8]} />
+    )
   };
 
   return (
     <>
-      <World />
-      <Camera azimuth={azimuth} position={[0, 1.5, -1]} >
-        {projectiles.clip.map(rocket => renderRocket(rocket))}
+      <World tex={world.tex}/>
+      <Camera azimuth={azimuth} position={[0, 1.5, -1]}>
+      
+        {clip.map((_, i) => renderRocket(_, i))} 
       </Camera>
+        
     </>
   )
 };

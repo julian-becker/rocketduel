@@ -24,6 +24,7 @@ const Camera = (props) => {
   return (
     <perspectiveCamera
     ref={ref}
+    position={[0, 1.5, -1]}
     fov={50}
     near={0.01} 
     far={5000}
