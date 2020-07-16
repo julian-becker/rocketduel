@@ -3,8 +3,9 @@ import * as THREE from 'three';
 
 const World = (props) => {
 
-  const ref = useRef();
   const { tex } = props;
+
+  const ref = useRef();
 
   return (
     <mesh

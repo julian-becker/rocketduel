@@ -23,7 +23,6 @@ const Scene = (props) => {
       
         {clip.map((_, i) => renderRocket(_, i))} 
       </Camera>
-        
     </>
   )
 };

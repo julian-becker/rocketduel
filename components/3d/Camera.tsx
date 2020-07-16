@@ -16,7 +16,6 @@ const Camera = (props) => {
   // Make the camera known to the system
   useEffect(() => {
     setDefaultCamera(ref.current);
-    ref.current.rotation.order = 'YXZ';
 
     TweenLite.to(ref.current, 1/16, { onUpdate: rotateCamera(azimuth, ref.current) });
   }, [azimuth]);
@@ -24,7 +23,8 @@ const Camera = (props) => {
   return (
     <perspectiveCamera
     ref={ref}
-    position={[0, 1.5, -1]}
+    name={'camera'}
+    position={[0, 1.5, 0]}
     fov={50}
     near={0.01} 
     far={5000}

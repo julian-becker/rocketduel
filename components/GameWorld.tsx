@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState, Suspense } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as THREE from 'three';
 import { Canvas } from 'react-three-fiber';
+import { PhysicsProvider } from '../hooks/useCannon';
 import { gsap } from 'gsap';
 import { TextureLoader, loadAsync } from 'expo-three';
 import Scene from './3d/Scene';
@@ -54,7 +55,7 @@ const GameWorld = () => {
         }
       });
       obj.scale.normalize().multiplyScalar(0.0015);
-      obj.rotation.z = -0.08;
+
       // load world texture
       const worldTex = new TextureLoader().load(require('../assets/backgrounds/cyl.jpg'));
       setAssets({
@@ -80,9 +81,11 @@ const GameWorld = () => {
   return assetsLoaded ? (
     <Canvas>
       <ambientLight />
-      <Suspense fallback={<ActivityIndicator />}>
-        <Scene player={player} projectiles={projectiles} assets={assets}/>
-      </Suspense>
+      <PhysicsProvider>
+        <Suspense fallback={<ActivityIndicator />}>
+          <Scene player={player} projectiles={projectiles} assets={assets}/>
+        </Suspense>
+      </PhysicsProvider>
     </Canvas>
   ) : <ActivityIndicator />
 
