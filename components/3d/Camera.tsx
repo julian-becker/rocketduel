@@ -1,33 +1,32 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useThree } from 'react-three-fiber'
-import { TweenLite } from 'gsap';
-
-const rotateCamera = (deg, camera) => {
-  // TODO: There's examples on the web of using quaternions here for smoother rotation
-  camera.rotation.y = THREE.MathUtils.degToRad(deg);
-  camera.updateMatrixWorld();
-}
 
 const Camera = (props) => {
   const ref = useRef();
   const { azimuth } = props;
-  const { scene, setDefaultCamera } = useThree();
+  const { setDefaultCamera } = useThree();
+
   // Make the camera known to the system
   useEffect(() => {
     setDefaultCamera(ref.current);
+  }, []);
 
-    TweenLite.to(ref.current, 1/16, { onUpdate: rotateCamera(azimuth, ref.current) });
+  // rotate it as needed
+  useEffect(() => {
+    ref.current.position.y = 1.7;
+    ref.current.position.x = Math.cos( azimuth );  
+    ref.current.position.z = Math.sin( azimuth );
+    ref.current.lookAt(0, 1.7, 0)
   }, [azimuth]);
 
   return (
     <perspectiveCamera
     ref={ref}
     name={'camera'}
-    position={[0, 1.5, 0]}
     fov={50}
     near={0.01} 
-    far={5000}
+    far={4800}
     {...props} />
   )
 }

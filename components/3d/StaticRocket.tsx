@@ -1,23 +1,35 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from 'react-three-fiber';
 
 const StaticRocket = (props) => {
-  const { data, mesh } = props;
+  const { data, mesh, angle, position } = props;
   const { isLoaded } = data;
-  const clonedMesh = mesh.clone();
+  const clonedMesh = useMemo(() => mesh.clone(), []);
   const ref = useRef();
 
-  const isRocketVisible = (data) => { 
-    return data.isInFlight || data.isLoaded;
-  };
+  const { scene } = useThree();
+  
+  let vec = new THREE.Vector3();
+
+  useFrame(() => {
+    const newCam = scene.getObjectByName('camera')
+    let camDir = newCam.getWorldDirection(vec);
+    const clampedAngle = THREE.MathUtils.clamp(angle, 0, 90);
+    const yRotation = THREE.MathUtils.degToRad(clampedAngle)
+
+    ref.current.lookAt(camDir.x, yRotation, camDir.z)
+  })
+  
 
   return (
     <primitive
-      {...props}
       ref={ref}
+      position={position}
       visible={isLoaded}
       object={clonedMesh}
       />
   )
 };
-// rotation-x={THREE.MathUtils.degToRad(angle - 90)}
+
 export default StaticRocket;

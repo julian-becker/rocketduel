@@ -2,10 +2,13 @@
 import React, { useContext, useEffect, useState, Suspense } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as THREE from 'three';
+import * as CANNON from 'cannon';
 import { Canvas } from 'react-three-fiber';
 import { PhysicsProvider } from '../hooks/useCannon';
+import { useCannon } from '../hooks/useCannon';
 import { gsap } from 'gsap';
 import { TextureLoader, loadAsync } from 'expo-three';
+import { PhysicsBodyWireframes } from './3d/debug';
 import Scene from './3d/Scene';
 import { GameContext } from '../contexts/Game';
 import { ProjectileContext } from '../contexts/Projectile';
@@ -78,14 +81,15 @@ const GameWorld = () => {
   const { projectiles } = useContext(ProjectileContext);
 
   const { clip } = projectiles;
+
   return assetsLoaded ? (
     <Canvas>
       <ambientLight />
-      <PhysicsProvider>
-        <Suspense fallback={<ActivityIndicator />}>
+      <Suspense fallback={<ActivityIndicator />}>
+        <PhysicsProvider>
           <Scene player={player} projectiles={projectiles} assets={assets}/>
-        </Suspense>
-      </PhysicsProvider>
+        </PhysicsProvider>
+      </Suspense>
     </Canvas>
   ) : <ActivityIndicator />
 
